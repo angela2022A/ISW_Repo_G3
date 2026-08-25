@@ -122,7 +122,7 @@ Cada fila define una familia de ítems de configuración, no un archivo puntual:
 |`<TEMA>`|Nombre corto y descriptivo del contenido del ítem, en mayúsculas y sin espacios ni tildes. Ej.: SCRUM, LEAN_KANBAN, DESPLIEGUE, POSTER.|
 |`<Unidad_Tematica>` (en ubicación)|Nombre de la subcarpeta de Material_Bibliografico a la que pertenece el ítem, tal como figura en el árbol de carpetas. Ej.: Ingeniería_de_Software, Testing_de_Software.|
 |`<Tema>` (en ubicación)|Nombre corto del TP tal como figura en el nombre de su carpeta. Ej.: SCM, Test_Driven_Development.|
-|`<VERSION>`|Número de versión del documento de gestión de configuración (Plan SCM). Ej.: v1.0, v2.0.|
+|`<VERSION>`|Número de versión del documento de gestión de configuración|
 |KvsS|Abreviación destinada al libro Kanban VS Scrum.|
 |LeUX|Abreviación destinada al libro Lean UX.|
 |TDD|Abreviación en inglés de Test Driven Development.|
