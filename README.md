@@ -90,7 +90,7 @@ Se definieron cuatro tipos de ítem de configuración, elegidos de modo tal que 
 
 ---
 
-## Ítems de configuración
+## Reglas de Nombrado
 
 Cada fila define una familia de ítems de configuración, no un archivo puntual: los textos entre `< >` son placeholders que se completan según el ítem concreto, siguiendo el Glosario. Todos los nombres llevan el prefijo fijo `G3_` que identifica al grupo. Las ubicaciones son relativas a la raíz del repositorio público.
 
