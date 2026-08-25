@@ -96,17 +96,17 @@ Cada fila define una familia de ítems de configuración, no un archivo puntual:
 
 | Nombre del ítem de configuración | Regla de nombrado | Ubicación | Tipo |
 |------|-------------|---------|-----|
-|Presentación de Cátedra|G3_ADM_PresCatedra.pdf|ISW_Repo_G3/Administracion_Materia|Administrativo|
-|Programa de la Materia|G3_ADM_ProgramaMateria.pdf|ISW_Repo_G3/Administracion_Materia|Administrativo|
-|Lineamiento de Trabajos Prácticos Grupales|G3_ADM_LineamientoTPs.docx|ISW_Repo_G3/Administracion_Materia|Administrativo|
-|Material de Apoyo para Parciales|G3_PARC_MatApoyo_<NN>.pdf|ISW_Repo_G3/Parciales/Parcial_<NN>|Soporte|
-|Material Bibliográfico|G3_BIB_<UNIDAD_TEMATICA>_<AUTOR_O_TEMA>.pdf|ISW_Repo_G3/Material_Bibliografico/<Unidad_Tematica>|Soporte|
-|Presentación de Clase|G3_PRES_U<N>_<TEMA>.pdf|ISW_Repo_G3/Presentaciones_Clases/Unidad_<N>|Soporte|
-|Entregable de Trabajo Práctico Grupal|G3_TP<NN>_Entregable.pdf|ISW_Repo_G3/Trabajos_Practicos_Grupales/TP<NN>_<Tema>|Entregable|
-|Entregable de Trabajo de Investigación|G3_TPINV<NN>_<TEMA>.pdf|ISW_Repo_G3/Trabajos_Practicos_Grupales/Trabajo_Investigacion/Trabajo_Investigacion_<NN>|Entregable|
-|Plan de Gestión de Configuración de Software|G3_SCM_PlanGestionConfiguracion_<VERSION>.pdf|ISW_Repo_G3/Documentacion_Gestion|GestionSCM|
-|Consigna Trabajo Práctico|G3_TP<NN>_Consigna.pdf|ISW_Repo_G3/Trabajos_Practicos_Grupales/TP<NN>_<Tema>|Soporte|
-|Consigna Trabajo Práctico Investigación|G3_TPINV<NN>_<TEMA>_Consigna.pdf|ISW_Repo_G3/Trabajos_Practicos_Grupales/Trabajo_Investigacion/Trabajo_Investigacion_<NN>|Soporte|
+|Presentación de Cátedra|`G3_ADM_PresCatedra.pdf`|`ISW_Repo_G3/Administracion_Materia`|Administrativo|
+|Programa de la Materia|`G3_ADM_ProgramaMateria.pdf`|`ISW_Repo_G3/Administracion_Materia`|Administrativo|
+|Lineamiento de Trabajos Prácticos Grupales|`G3_ADM_LineamientoTPs.docx`|`ISW_Repo_G3/Administracion_Materia`|Administrativo|
+|Material de Apoyo para Parciales|`G3_PARC_MatApoyo_<NN>.pdf`|`ISW_Repo_G3/Parciales/Parcial_<NN>`|Soporte|
+|Material Bibliográfico|`G3_BIB_<UNIDAD_TEMATICA>_<AUTOR_O_TEMA>.pdf`|`ISW_Repo_G3/Material_Bibliografico/<Unidad_Tematica>`|Soporte|
+|Presentación de Clase|`G3_PRES_U<N>_<TEMA>.pdf`|`ISW_Repo_G3/Presentaciones_Clases/Unidad_<N>`|Soporte|
+|Entregable de Trabajo Práctico Grupal|`G3_TP<NN>_Entregable.pdf`|`ISW_Repo_G3/Trabajos_Practicos_Grupales/TP<NN>_<Tema>`|Entregable|
+|Entregable de Trabajo de Investigación|`G3_TPINV<NN>_<TEMA>.pdf`|`ISW_Repo_G3/Trabajos_Practicos_Grupales/Trabajo_Investigacion/Trabajo_Investigacion_<NN>`|Entregable|
+|Plan de Gestión de Configuración de Software|`G3_SCM_PlanGestionConfiguracion_<VERSION>.pdf`|`ISW_Repo_G3/Documentacion_Gestion`|GestionSCM|
+|Consigna Trabajo Práctico|`G3_TP<NN>_Consigna.pdf`|`ISW_Repo_G3/Trabajos_Practicos_Grupales/TP<NN>_<Tema>`|Soporte|
+|Consigna Trabajo Práctico Investigación|`G3_TPINV<NN>_<TEMA>_Consigna.pdf`|`ISW_Repo_G3/Trabajos_Practicos_Grupales/Trabajo_Investigacion/Trabajo_Investigacion_<NN>`|Soporte|
 
 ---
 
@@ -114,7 +114,7 @@ Cada fila define una familia de ítems de configuración, no un archivo puntual:
 
 | Sigla | Significado |
 |------------|-------------|
-|G3_|Prefijo fijo que identifica al Grupo 3. Presente al inicio de todos los nombres de ítems de configuración del repositorio.|
+|`G3_`|Prefijo fijo que identifica al Grupo 3. Presente al inicio de todos los nombres de ítems de configuración del repositorio.|
 |`<NN>`|Número correlativo (de Parcial o de Trabajo Práctico), de dos dígitos con cero a la izquierda. Ej.: 01, 04, 11.|
 |`<N>`|Número de unidad temática de la cursada (1 a 4).|
 |`<UNIDAD_TEMATICA>`|Nombre corto del área bibliográfica a la que pertenece el material, en mayúsculas y sin espacios ni tildes. Ej.: ISW, SCM, TESTING, TDD, AGIL, LEAN.|
@@ -122,10 +122,10 @@ Cada fila define una familia de ítems de configuración, no un archivo puntual:
 |`<TEMA>`|Nombre corto y descriptivo del contenido del ítem, en mayúsculas y sin espacios ni tildes. Ej.: SCRUM, LEAN_KANBAN, DESPLIEGUE, POSTER.|
 |`<Unidad_Tematica>` (en ubicación)|Nombre de la subcarpeta de Material_Bibliografico a la que pertenece el ítem, tal como figura en el árbol de carpetas. Ej.: Ingeniería_de_Software, Testing_de_Software.|
 |`<Tema>` (en ubicación)|Nombre corto del TP tal como figura en el nombre de su carpeta. Ej.: SCM, Test_Driven_Development.|
+|`<VERSION>`|Número de versión del documento de gestión de configuración (Plan SCM). Ej.: v1.0, v2.0.|
 |KvsS|Abreviación destinada al libro Kanban VS Scrum.|
 |LeUX|Abreviación destinada al libro Lean UX.|
 |TDD|Abreviación en inglés de Test Driven Development.|
-|<VERSION>|Asociada a la versión del documento de gestión de configuración.|
 
 ---
 
