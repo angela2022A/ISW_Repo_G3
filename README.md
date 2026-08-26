@@ -131,18 +131,32 @@ Cada fila define una familia de ítems de configuración, no un archivo puntual:
 
 ## Definición y justificación de líneas base (Baselines)
 
-1. Momentos de Creación (Hitos de Línea Base)
-La estrategia de congelamiento de versiones se divide en dos instancias fundamentales:
-Línea Base Inicial: Se establecerá la primera línea base en el momento en que la totalidad de los recursos provistos por la cátedra (definidos en este documento como ítems de tipo Administrativo y Soporte) se encuentren efectivamente subidos al repositorio. Esto justifica la creación de un entorno de trabajo base sólido antes de iniciar la producción del equipo.
-Líneas Base Evolutivas: Se generarán nuevas líneas base de forma incremental cada vez que se concrete la entrega oficial de un Trabajo Práctico (correspondiente a los ítems de tipo Entregable) o cuando se alcance la fecha de un examen parcial. Esto asegura que el estado del repositorio quede auditable e inalterable justo en las instancias críticas de evaluación.
-2. Nomenclatura y Trazabilidad
-Para la identificación unívoca de las líneas base, se adoptó una convención de nombrado basada estrictamente en el número de versión (por ejemplo: V1.0, V2.0, V3.0). La justificación de este enfoque radica en su simplicidad: permite mantener un seguimiento secuencial y claro sobre la evolución temporal de todos los ítems de configuración, facilitando la auditoría del repositorio.
-3. Criterios de Aceptación para Ítems de Configuración
-La robustez de estas líneas base se sostiene mediante un riguroso control de calidad previo. Un ítem de configuración sólo será incorporado a una línea base si cumple obligatoriamente con las siguientes condiciones:
-Ubicación estructural: El archivo debe encontrarse alojado en el directorio exacto que le corresponde dentro del árbol de carpetas del repositorio.
-Conformidad de formato: El archivo debe respetar escrupulosamente las reglas de nombrado definidas para su familia de ítems en la Sección 3.
-Revisión técnica de pares: El ítem debe haber superado una instancia de verificación de calidad. Para garantizar la objetividad, no basta con la revisión del integrante creador; se exige explícitamente que al menos un integrante distinto del grupo audite y valide que el documento se encuentra en óptimas condiciones.
-Estado de completitud: El documento debe ser la versión definitiva. Se rechaza categóricamente la inclusión de ítems con desarrollo parcial, asegurando que la línea base solo contenga productos terminados y listos para su uso o evaluación.
+## 1. Momentos de Creación (Hitos de Línea Base)
+
+La estrategia de congelamiento de versiones se divide en dos instancias fundamentales a lo largo del ciclo de vida del proyecto:
+
+*   **Línea Base Inicial:** Se establecerá la primera línea base en el momento en que la totalidad de los recursos provistos por la cátedra (definidos como ítems de tipo *Administrativo* y *Soporte*) se encuentren efectivamente subidos al repositorio. Esto justifica la creación de un entorno de trabajo base sólido antes de iniciar la producción del equipo.
+*   **Líneas Base Evolutivas:** Se generarán nuevas líneas base de forma incremental cada vez que se concrete la entrega oficial de un Trabajo Práctico (correspondiente a los ítems de tipo *Entregable*) o cuando se alcance la fecha de un examen parcial. Esto asegura que el estado del repositorio quede auditable e inalterable justo en las instancias críticas de evaluación.
+
+---
+
+## 2. Nomenclatura y Trazabilidad
+
+Para la identificación unívoca de las líneas base, se adopta una convención de nombrado basada estrictamente en el número de versión. 
+
+*   **Formato de ejemplo:** `V1.0`, `V2.0`, `V3.0`
+
+**Justificación:** La simplicidad de este enfoque permite mantener un seguimiento secuencial y claro sobre la evolución temporal de todos los ítems de configuración, facilitando enormemente la auditoría del repositorio.
+
+---
+
+## 3. Criterios de Aceptación para Ítems de Configuración
+
+La robustez de nuestras líneas base se sostiene mediante un riguroso control de calidad previo. Un ítem de configuración solo será incorporado a una línea base si cumple **obligatoriamente** con el siguiente checklist:
+
+- [x] **Ubicación estructural:** El archivo debe encontrarse alojado en el directorio exacto que le corresponde dentro del árbol de carpetas del repositorio.
+- [x] **Conformidad de formato:** El archivo debe respetar escrupulosamente las reglas de nombrado definidas para su familia de ítems en la Sección 3 del Plan SCM.
+- [x] **Revisión técnica de pares:** El ítem debe haber superado una instancia de verificación de calidad. Para garantizar la objetividad, no basta con la revisión del integrante creador; se exige explícitamente que al menos **un integrante distinto del grupo** audite y valide que el documento se encuentra en óptimas condiciones.
 
 
 ---
