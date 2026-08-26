@@ -27,9 +27,9 @@
 |Bisio, Juan Martín|401571|
 |Caffaratti, Máximo David|401609|
 |Crovato, Agustín|403878|
-|Lavini, Alejandro Raúl|402745|
 |Fava, Augusto|95058|
 |Giorgi, Lorenzo|403852|
+|Lavini, Alejandro Raúl|402745|
 |Maldonado Alberich, Gonzalo|404483|
 |Mansur, Nicolás|402774|
 |Martínez, Joaquín|96110|
