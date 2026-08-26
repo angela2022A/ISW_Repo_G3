@@ -131,19 +131,33 @@ Cada fila define una familia de ítems de configuración, no un archivo puntual:
 
 ## Definición y justificación de líneas base (Baselines)
 
-Para asegurar un control de versiones riguroso y mantener la integridad del repositorio, el equipo estableció dos niveles de líneas base a lo largo del ciclo de vida del proyecto:
+## 1. Momentos de Creación (Hitos de Línea Base)
 
-**1. Línea Base de Gestión (Configuración y Estructura)**
+La estrategia de congelamiento de versiones se divide en dos instancias fundamentales a lo largo del ciclo de vida del proyecto:
 
-Ítem asociado: archivo correspondiente al tipo de ítem GestionSCM (Plan de Gestión de Configuración de Software).
+*   **Línea Base Inicial:** Se establecerá la primera línea base en el momento en que la totalidad de los recursos provistos por la cátedra (definidos como ítems de tipo *Administrativo* y *Soporte*) se encuentren efectivamente subidos al repositorio. Esto justifica la creación de un entorno de trabajo base sólido antes de iniciar la producción del equipo.
+*   **Líneas Base Evolutivas:** Se generarán nuevas líneas base de forma incremental cada vez que se concrete la entrega oficial de un Trabajo Práctico (correspondiente a los ítems de tipo *Entregable*) o cuando se alcance la fecha de un examen parcial. Esto asegura que el estado del repositorio quede auditable e inalterable justo en las instancias críticas de evaluación.
 
-Justificación: este documento contiene la meta-documentación del proyecto, estableciendo reglas críticas como la estructura de carpetas, la clasificación de los ítems de configuración y la regla de nombrado unificada. Establecerlo como línea base congela las reglas estructurales del repositorio: cualquier modificación futura sobre cómo se gestiona la configuración requerirá un control de cambios formal, evitando alteraciones no planificadas que puedan desorganizar el repositorio del grupo.
+---
 
-**2. Líneas Base de Producto (Hitos de Evaluación)**
+## 2. Nomenclatura y Trazabilidad
 
-Ítems asociados: archivos correspondientes al tipo de ítem Entregable, alojados dentro del directorio Trabajos_Practicos_Grupales.
+Para la identificación unívoca de las líneas base, se adopta una convención de nombrado basada estrictamente en el número de versión. 
 
-Justificación: las resoluciones de los Trabajos Prácticos grupales y del Trabajo de Investigación representan el trabajo del equipo. Al no admitir re-entrega, cada entregable (por ejemplo, los archivos nombrados bajo la regla `G3_TP<NN>_Entregable.pdf` o `G3_TPINV<NN>_<TEMA>.pdf`) se establece como línea base en el momento exacto de su envío, "congelando" esa versión específica. Esta práctica garantiza la trazabilidad absoluta de la versión evaluada por la cátedra y proporciona un punto de restauración seguro y auditable: si se requieren correcciones futuras, los nuevos cambios se iteran sobre una versión posterior, manteniendo intacta la integridad histórica de la entrega original.
+*   **Formato de ejemplo:** `V1.0`, `V2.0`, `V3.0`
+
+**Justificación:** La simplicidad de este enfoque permite mantener un seguimiento secuencial y claro sobre la evolución temporal de todos los ítems de configuración, facilitando enormemente la auditoría del repositorio.
+
+---
+
+## 3. Criterios de Aceptación para Ítems de Configuración
+
+La robustez de nuestras líneas base se sostiene mediante un riguroso control de calidad previo. Un ítem de configuración solo será incorporado a una línea base si cumple **obligatoriamente** con el siguiente checklist:
+
+- [x] **Ubicación estructural:** El archivo debe encontrarse alojado en el directorio exacto que le corresponde dentro del árbol de carpetas del repositorio.
+- [x] **Conformidad de formato:** El archivo debe respetar escrupulosamente las reglas de nombrado definidas para su familia de ítems en la Sección 3 del Plan SCM.
+- [x] **Revisión técnica de pares:** El ítem debe haber superado una instancia de verificación de calidad. Para garantizar la objetividad, no basta con la revisión del integrante creador; se exige explícitamente que al menos **un integrante distinto del grupo** audite y valide que el documento se encuentra en óptimas condiciones.
+
 
 ---
 
