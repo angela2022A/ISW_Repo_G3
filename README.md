@@ -55,23 +55,22 @@ ISW_Repo_G3/
 │   ├── 📂 Agilismo/
 │   └── 📂 Lean_y_Kanban/
 ├── 📂 Presentaciones_Clases/
-│   ├── 📂 Unidad_1/
-│   ├── 📂 Unidad_2/
-│   ├── 📂 Unidad_3/
-│   └── 📂 Unidad_4/
+│   ├── 📂 Ingenieria_de_Software/
+│   ├── 📂 Agilismo/
+│   ├── 📂 SCM/
+│   └── 📂 Aseguramiento_Calidad/
 ├── 📂 Trabajos_Practicos_Grupales/
-│   ├── 📂 TP04_SCM/
-│   ├── 📂 TP06_Test_Driven_Development/
-│   ├── 📂 TP07_Dinamica_Scrum/
-│   ├── 📂 TP09_Testing/
-│   ├── 📂 TP10_Retrospectiva/
-│   ├── 📂 TP11_Design_Thinking/
+│   ├── 📂 SCM/
+│   ├── 📂 Test_Driven_Development/
+│   ├── 📂 Dinamica_Scrum/
+│   ├── 📂 Testing/
+│   ├── 📂 Retrospectiva/
+│   ├── 📂 Design_Thinking/
 │   └── 📂 Trabajo_Investigacion/
-│       ├── 📂 Trabajo_Investigacion_Grupal_1/
-│       └── 📂 Trabajo_Investigacion_Grupal_2/
+│       ├── 📂 Exposición_Despliegue_de_producto/
+│       └── 📂 Poster_Científico_Frameworks_Lean_Agile/
 ├── 📂 Parciales/
-│   ├── 📂 Parcial_01/
-│   └── 📂 Parcial_02/
+│   ├── 📂 Parcial_<NN>/
 └── 📂 Documentacion_Gestion/
 ```
 
