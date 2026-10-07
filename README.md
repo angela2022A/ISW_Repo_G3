@@ -14,7 +14,7 @@
 
 **Docentes:**
 - Ing. Cecilia Massano
-- Ing. Meles, Judith
+- Ing. Judith Meles
 - Ezequiel Izaguirre
 - Marcos Pomenich
 
@@ -48,8 +48,8 @@
 ISW_Repo_G3/
 ├── 📂 Administracion_Materia/
 ├── 📂 Material_Bibliografico/
-│   ├── 📂 Ingeniería_de_Software/
-│   ├── 📂 SCM_Gestión_de_Configuración_de_Software/
+│   ├── 📂 Ingenieria_de_Software/
+│   ├── 📂 SCM_Gestion_de_Configuracion_de_Software/
 │   ├── 📂 Testing_de_Software/
 │   ├── 📂 Test_Driven_Development/
 │   ├── 📂 Agilismo/
@@ -71,7 +71,7 @@ ISW_Repo_G3/
 │       └── 📂 Poster_Científico_Frameworks_Lean_Agile/
 ├── 📂 Apuntes_Clases/
 ├── 📂 Parciales/
-│   ├── 📂 Parcial_<NN>/
+│   └── 📂 Parcial_<NN>/
 └── 📂 Documentacion_Gestion/
 ```
 
@@ -88,6 +88,8 @@ Se definieron cuatro tipos de ítem de configuración, elegidos de modo tal que 
 |Entregable|Resoluciones de Trabajos Prácticos grupales y del Trabajo de Investigación, producidas activamente por el grupo.|Trabajos_Practicos_Grupales|
 |GestionSCM|Meta-documentación: describe cómo se gestiona la configuración del propio repositorio.|Documentacion_Gestion|
 
+> **Nota:** Las consignas de los Trabajos Prácticos (tipo Soporte, provistas por la cátedra) se ubican dentro de `Trabajos_Practicos_Grupales`, junto a los entregables, porque van en la misma subcarpeta del tema correspondiente.
+
 ---
 
 ## Reglas de Nombrado
@@ -101,13 +103,13 @@ Cada fila define una familia de ítems de configuración, no un archivo puntual:
 |Lineamiento de Trabajos Prácticos Grupales|`G3_ADM_LineamientoTPs.docx`|`ISW_Repo_G3/Administracion_Materia`|Administrativo|
 |Material de Apoyo para Parciales|`G3_PARC_MatApoyo_<NN>.pdf`|`ISW_Repo_G3/Parciales/Parcial_<NN>`|Soporte|
 |Material Bibliográfico|`G3_BIB_<UNIDAD_TEMATICA>_<AUTOR_O_TEMA>.pdf`|`ISW_Repo_G3/Material_Bibliografico/<Unidad_Tematica>`|Soporte|
-|Presentación de Clase|`G3_PRES_U<N>_<TEMA>.pdf`|`ISW_Repo_G3/Presentaciones_Clases/Unidad_<N>`|Soporte|
+|Presentación de Clase|`G3_PRES_U<N>_<TEMA>.pdf`|`ISW_Repo_G3/Presentaciones_Clases/<Tema>`|Soporte|
 |Apunte de Clase|`G3_APU_<NN>_<TEMA>_<AUTOR>.pdf`|`ISW_Repo_G3/Apuntes_Clases`|Soporte|
-|Entregable de Trabajo Práctico Grupal|`G3_TP<NN>_Entregable.pdf`|`ISW_Repo_G3/Trabajos_Practicos_Grupales/TP<NN>_<Tema>`|Entregable|
-|Entregable de Trabajo de Investigación|`G3_TPINV<NN>_<TEMA>.pdf`|`ISW_Repo_G3/Trabajos_Practicos_Grupales/Trabajo_Investigacion/Trabajo_Investigacion_<NN>`|Entregable|
+|Entregable de Trabajo Práctico Grupal|`G3_TP<NN>_Entregable.pdf`|`ISW_Repo_G3/Trabajos_Practicos_Grupales/<Tema>`|Entregable|
+|Entregable de Trabajo de Investigación|`G3_TPINV<NN>_<TEMA>.pdf`|`ISW_Repo_G3/Trabajos_Practicos_Grupales/Trabajo_Investigacion/<Tema>`|Entregable|
 |Plan de Gestión de Configuración de Software|`G3_SCM_PlanGestionConfiguracion_<VERSION>.pdf`|`ISW_Repo_G3/Documentacion_Gestion`|GestionSCM|
-|Consigna Trabajo Práctico|`G3_TP<NN>_Consigna.pdf`|`ISW_Repo_G3/Trabajos_Practicos_Grupales/TP<NN>_<Tema>`|Soporte|
-|Consigna Trabajo Práctico Investigación|`G3_TPINV<NN>_<TEMA>_Consigna.pdf`|`ISW_Repo_G3/Trabajos_Practicos_Grupales/Trabajo_Investigacion/Trabajo_Investigacion_<NN>`|Soporte|
+|Consigna Trabajo Práctico|`G3_TP<NN>_Consigna.pdf`|`ISW_Repo_G3/Trabajos_Practicos_Grupales/<Tema>`|Soporte|
+|Consigna Trabajo Práctico Investigación|`G3_TPINV<NN>_<TEMA>_Consigna.pdf`|`ISW_Repo_G3/Trabajos_Practicos_Grupales/Trabajo_Investigacion/<Tema>`|Soporte|
 
 ---
 
@@ -122,8 +124,8 @@ Cada fila define una familia de ítems de configuración, no un archivo puntual:
 |`<AUTOR_O_TEMA>`|Apellido del autor principal o nombre corto del tema del material bibliográfico, en mayúsculas y sin espacios ni tildes. Ej.: SOMMERVILLE, SWEBOK.|
 |`<TEMA>`|Nombre corto y descriptivo del contenido del ítem, en mayúsculas y sin espacios ni tildes. Ej.: SCRUM, LEAN_KANBAN, DESPLIEGUE, POSTER.|
 |`<AUTOR>`|Apellido del integrante del grupo que tomó las notas del apunte de clase, en mayúsculas y sin espacios ni tildes. Ej.: PEREYRA, QUINTANA.|
-|`<Unidad_Tematica>` (en ubicación)|Nombre de la subcarpeta de Material_Bibliografico a la que pertenece el ítem, tal como figura en el árbol de carpetas. Ej.: Ingeniería_de_Software, Testing_de_Software.|
-|`<Tema>` (en ubicación)|Nombre corto del TP tal como figura en el nombre de su carpeta. Ej.: SCM, Test_Driven_Development.|
+|`<Unidad_Tematica>` (en ubicación)|Nombre de la subcarpeta de Material_Bibliografico a la que pertenece el ítem, tal como figura en el árbol de carpetas. Ej.: Ingenieria_de_Software, Testing_de_Software.|
+|`<Tema>` (en ubicación)|Nombre corto de la subcarpeta correspondiente (de Presentaciones_Clases, de Trabajos_Practicos_Grupales o de Trabajo_Investigacion) tal como figura en el árbol de carpetas. Ej.: SCM, Test_Driven_Development, Dinamica_Scrum.|
 |`<VERSION>`|Número de versión del documento de gestión de configuración|
 |KvsS|Abreviación destinada al libro Kanban VS Scrum.|
 |LeUX|Abreviación destinada al libro Lean UX.|
@@ -133,7 +135,7 @@ Cada fila define una familia de ítems de configuración, no un archivo puntual:
 
 ## Definición y justificación de líneas base (Baselines)
 
-## 1. Momentos de Creación (Hitos de Línea Base)
+### 1. Momentos de Creación (Hitos de Línea Base)
 
 La estrategia de congelamiento de versiones se divide en dos instancias fundamentales a lo largo del ciclo de vida del proyecto:
 
@@ -142,7 +144,7 @@ La estrategia de congelamiento de versiones se divide en dos instancias fundamen
 
 ---
 
-## 2. Nomenclatura y Trazabilidad
+### 2. Nomenclatura y Trazabilidad
 
 Para la identificación unívoca de las líneas base, se adopta una convención de nombrado basada estrictamente en el número de versión. 
 
@@ -152,7 +154,7 @@ Para la identificación unívoca de las líneas base, se adopta una convención 
 
 ---
 
-## 3. Criterios de Aceptación para Ítems de Configuración
+### 3. Criterios de Aceptación para Ítems de Configuración
 
 La robustez de nuestras líneas base se sostiene mediante un riguroso control de calidad previo. Un ítem de configuración solo será incorporado a una línea base si cumple **obligatoriamente** con el siguiente checklist:
 
