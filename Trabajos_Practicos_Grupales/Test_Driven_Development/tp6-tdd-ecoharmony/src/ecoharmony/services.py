@@ -30,11 +30,11 @@ def enviar_confirmacion_compra(compra):
         subject="Confirmación de compra - EcoHarmony Park",
         message=(
             f"Compra confirmada. Entradas: {compra.cantidad_entradas}. "
-            f"Fecha de visita: {compra.fecha_visita.isoformat()}. "
+            f"Fecha de visita: {compra.fecha_visita:%d/%m/%Y}. "
             f"Total: ${compra.total}."
         ),
         from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[settings.EMAIL_CONFIRMATION_RECIPIENT],
+        recipient_list=[compra.usuario.email],
         fail_silently=False,
     )
 
