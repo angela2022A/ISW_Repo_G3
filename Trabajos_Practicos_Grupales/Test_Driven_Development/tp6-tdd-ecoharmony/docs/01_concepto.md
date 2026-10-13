@@ -2,38 +2,36 @@
 
 ## User Story
 
-> **Inscribirme a actividad** (5 SP)
-> COMO visitante QUIERO inscribirme a una actividad PARA reservar mi lugar en la misma.
+> **Comprar entradas**
+> COMO visitante registrado QUIERO comprar entradas indicando fecha, cantidad,
+> edad de cada visitante y tipo de pase PARA asegurar mi visita al parque.
 
-## Reglas de negocio (derivadas de los criterios de aceptación)
+## Criterios de aceptación y reglas
 
-| # | Regla | Criterio de aceptación de origen |
-|---|---|---|
-| R1 | La actividad debe pertenecer al listado: Tirolesa, Safari, Palestra, Jardinería | "Debe requerir seleccionar una actividad del conjunto…" |
-| R2 | El horario debe estar dentro de los disponibles de la actividad | "Debe requerir seleccionar el horario dentro de los disponibles" |
-| R3 | Debe haber cupo suficiente en ese horario para todas las personas | "…siempre y cuando tengan cupos disponibles para el horario seleccionado" |
-| R4 | Se indica la cantidad de personas que participan | "Debe indicar la cantidad de personas…" |
-| R5 | Por cada persona: nombre, DNI y edad obligatorios | "Para cada persona… nombre, DNI, edad…" |
-| R6 | Talla de vestimenta obligatoria solo si la actividad la exige | "…y talla de vestimenta si la actividad lo demanda" |
-| R7 | Deben aceptarse los términos y condiciones de la actividad | "Debe requerir aceptar los términos y condiciones…" |
-| R8 | Al finalizar, se envía un email con la información de la inscripción y un código QR | "Al finalizar la inscripción, se debe enviar un correo…" |
+| # | Regla |
+|---|---|
+| R1 | Solo usuarios registrados e iniciados pueden comprar entradas. |
+| R2 | Se elige una fecha de visita de hoy en adelante; el parque abre todos los días. |
+| R3 | La cantidad está entre 1 y 10 entradas. |
+| R4 | Para cada entrada se indica la edad y el tipo de pase (regular o VIP). |
+| R5 | Se muestra el monto total calculado con el precio correspondiente a cada pase. |
+| R6 | Se elige un medio de pago: efectivo en boletería o tarjeta. |
+| R7 | El pago con tarjeta redirige a Mercado Pago; el de efectivo se completa en boletería. |
+| R8 | La compra confirmada informa la cantidad y fecha y envía un email de confirmación. |
 
-## Supuestos del grupo
+## Supuestos acordados
 
-La US no define estos puntos. Los fijamos para poder escribir pruebas con datos concretos:
+- Los precios regular y VIP son provisorios y se configuran fuera del código.
+- La fecha de hoy es válida; las fechas pasadas no.
+- No se simula un cobro real ni se integra con credenciales de Mercado Pago en las
+  pruebas. Se verifica la redirección usando una URL de prueba configurable.
+- El usuario se identifica con email y contraseña.
+- Los datos de visitantes y la compra confirmada quedan asociados a la compra para
+  presentar la información necesaria al ingreso.
 
-| # | Supuesto | Motivo |
-|---|---|---|
-| S1 | Tirolesa y Palestra requieren talla (arnés / equipo); Safari y Jardinería no | La US no indica cuáles la requieren |
-| S2 | El parque abre de 09:00 a 18:00 y cada actividad tiene horarios fijos dentro de esa franja (ver `tests/conftest.py`) | Necesario para probar U4 |
-| S3 | Los cupos son por actividad y por horario, y se descuentan al inscribirse | Sin descuento la regla R3 no tendría efecto |
-| S4 | La cantidad de personas debe ser ≥ 1 y coincidir con la cantidad de visitantes cargados | Coherencia entre R4 y R5 |
-| S5 | El email se envía al visitante que realiza la inscripción (usuario ya identificado); la dirección la resuelve el notificador | La US no pide ingresar un email |
-| S6 | Si la inscripción se rechaza, no se descuentan cupos ni se envía email | Consecuencia lógica de R3 y R8 |
+## Fuera de alcance inicial
 
-## Fuera de alcance
-
-- Edad mínima por actividad: no figura en los criterios de aceptación.
-- Validación de formato de DNI: solo se exige que esté presente.
-- Envío real de emails y generación real del QR: se reemplazan por dobles de prueba (ver `04_decisiones_de_diseno.md`).
-- Interfaz de usuario: la US se ejercita llamando directamente a `inscribir_actividad(...)`.
+- Administración de precios y calendario desde una interfaz.
+- Procesamiento real de tarjetas, credenciales de producción y confirmación
+  asíncrona de Mercado Pago.
+- Emisión de comprobantes fiscales.

@@ -1,39 +1,32 @@
-# 02 — Lista de pruebas (Test List)
+# 02 — Lista de pruebas web (Test List)
 
-Escrita **antes** de implementar, siguiendo el patrón *Test List* ("primero escribe la lista de tests que vas a realizar").
-Los casos derivados se obtuvieron con **partición de equivalencias** y **análisis de valores límite**.
+Las pruebas se ejecutan mediante el cliente de pruebas de Django contra las
+vistas HTTP. Cada escenario recorre pasos del usuario; no se prueban funciones
+internas como sustituto de la interfaz web.
 
-## Pruebas de usuario de la US (obligatorias)
-
-| ID | Prueba de usuario | Regla | Resultado esperado | Test |
+| ID | Escenario | Regla | Resultado esperado | Test |
 |---|---|---|---|---|
-| U1 | Inscribirse a una actividad con cupo, horario válido, datos completos, T&C aceptados y recepción del email | R1–R8 | pasa | `test_inscripcion_valida_devuelve_los_datos_de_la_inscripcion` + `test_inscripcion_exitosa_envia_email_con_qr` |
-| U2 | Inscribirse a una actividad sin cupo en el horario | R3 | falla — `SinCupoError` | `test_inscripcion_a_horario_sin_cupo_falla` |
-| U3 | Inscribirse sin talla en una actividad que no la requiere | R6 | pasa | `test_inscripcion_sin_talla_en_actividad_que_no_la_requiere_pasa` |
-| U4 | Inscribirse en un horario con el parque cerrado o la actividad no disponible | R2 | falla — `HorarioNoDisponibleError` | `test_inscripcion_en_horario_no_disponible_falla` |
-| U5 | Inscribirse sin aceptar T&C | R7 | falla — `TerminosNoAceptadosError` | `test_inscripcion_sin_aceptar_terminos_falla` |
-| U6 | Inscribirse sin talla en una actividad que la requiere | R6 | falla — `TallaRequeridaError` | `test_inscripcion_sin_talla_requerida_por_la_actividad_falla` |
+| W1 | Abrir la página principal | — | Se muestra acceso a comprar entradas | `test_inicio_web_muestra_acceso_a_compra_de_entradas` |
+| W2 | Usuario anónimo intenta comprar | R1 | Redirección al inicio de sesión | `test_visitante_sin_registro_no_puede_iniciar_una_compra` |
+| W3 | Registrarse, iniciar sesión y comprar en efectivo | R1–R8 | Confirmación con fecha y cantidad y email enviado | `test_compra_en_efectivo_confirma_fecha_cantidad_y_envia_email` |
+| W4 | Comprar pases regular y VIP | R4–R5 | Total calculado con los precios configurados | `test_compra_calcula_total_segun_pase_de_cada_visitante` |
+| W5 | Comprar con tarjeta | R6–R7 | Redirección a Mercado Pago | `test_compra_con_tarjeta_redirige_a_mercado_pago` |
+| W6 | Omitir el medio de pago | R6 | Error visible y sin email de confirmación | `test_compra_sin_medio_de_pago_muestra_error_y_no_envia_email` |
+| W7 | Seleccionar una fecha pasada | R2 | Error visible y compra no confirmada | `test_compra_rechaza_fecha_anterior_a_hoy` |
+| W8 | Solicitar 11 entradas | R3 | Rechazo del límite máximo de 10 | `test_compra_rechaza_mas_de_diez_entradas` |
+| W9 | Omitir edad o tipo de pase | R4 | Errores de validación visibles | `test_compra_rechaza_edad_o_tipo_de_pase_faltante` |
 
-## Casos derivados de los criterios de aceptación
+## Datos de prueba
 
-| ID | Caso | Regla | Técnica | Resultado esperado | Test |
-|---|---|---|---|---|---|
-| D1 | Actividad fuera del listado (`'Buceo'`, vacía, `None`) | R1 | Partición — clase inválida | falla | `test_inscripcion_a_actividad_fuera_del_listado_falla` |
-| D2 | Cupo restante = 3, se inscriben 3 | R3 | Valor límite (borde válido) | pasa | `test_inscripcion_que_ocupa_exactamente_el_cupo_restante_pasa` |
-| D3 | Cupo restante = 3, se inscriben 4 | R3 | Valor límite (borde inválido) | falla | `test_inscripcion_que_supera_en_uno_el_cupo_restante_falla` |
-| D4 | Cantidad de personas = 0 | S4 | Valor límite | falla | `test_inscripcion_con_cero_personas_falla` |
-| D5 | Cantidad declarada ≠ visitantes cargados | S4 | Partición | falla | `test_inscripcion_con_cantidad_distinta_a_visitantes_falla` |
-| D6 | Visitante sin nombre, DNI o edad | R5 | Partición — una clase inválida por dato | falla | `test_inscripcion_con_visitante_incompleto_falla` |
-| D7 | Tras una inscripción exitosa el cupo baja | S3 | Comportamiento | cupo 10 → 8 | `test_inscripcion_exitosa_descuenta_los_cupos` |
-| D8 | Si la inscripción se rechaza, no se envía email | S6 | Comportamiento (mock) | email no enviado | `test_inscripcion_rechazada_no_envia_email` |
+- Cada escenario crea su propio cliente y usa SQLite en memoria.
+- Los precios predeterminados de pruebas son 1000 para pase regular y 2000 para
+  VIP; se sobreescriben en el escenario de cálculo.
+- El envío de correo usa el backend local de Django, sin servicios externos.
+- La URL de Mercado Pago en pruebas usa el dominio reservado `mercadopago.test`.
 
-## Clases de equivalencia
+## Estado de la etapa RED
 
-| Entrada | Válidas | Inválidas |
-|---|---|---|
-| Actividad | {Tirolesa, Safari, Palestra, Jardinería} | fuera del listado, vacía, nula |
-| Horario | horarios de la actividad | parque cerrado, actividad no opera |
-| Cantidad de personas | 1 ≤ n ≤ cupo restante y n = visitantes cargados | 0, n > cupo restante, n ≠ visitantes |
-| Datos del visitante | nombre, DNI y edad presentes | falta alguno |
-| Talla | presente; ausente si la actividad no la requiere | ausente si la actividad la requiere |
-| T&C | aceptados | no aceptados |
+Las pruebas describen rutas HTTP todavía no implementadas y deben fallar hasta
+que se complete GREEN. No se consideran válidas como RED fallas de importación,
+configuración o dependencias; el resultado esperado es un rechazo HTTP por rutas
+aún no conectadas.

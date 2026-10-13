@@ -1,10 +1,14 @@
 [project]
 name = "ecoharmony-inscripcion"
 version = "0.1.0"
-description = "TP6 TDD - US 'Inscribirme a actividad' (EcoHarmony Park)"
+description = "TP6 TDD - Aplicación web para comprar entradas a EcoHarmony Park"
 requires-python = ">=3.10"
+dependencies = [
+    "Django>=5.2,<7",
+]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
 addopts = "-v"
+DJANGO_SETTINGS_MODULE = "tests.settings"
