@@ -2,9 +2,9 @@
 name = "ecoharmony-comprar-entradas"
 version = "0.1.0"
 description = "TP6 TDD - Aplicación web para comprar entradas a EcoHarmony Park"
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 dependencies = [
-    "Django>=5.2,<7",
+    "Django>=4.2,<7",
 ]
 
 [tool.pytest.ini_options]

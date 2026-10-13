@@ -2,6 +2,7 @@
 
 SECRET_KEY = "test-only-secret-key"
 DEBUG = True
+USE_TZ = True
 ALLOWED_HOSTS = ["testserver", "localhost"]
 ROOT_URLCONF = "tests.urls"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
