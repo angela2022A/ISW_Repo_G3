@@ -158,7 +158,7 @@ def test_compra_calcula_total_segun_pase_de_cada_visitante(cliente):
     assert b"Total: $3000" in respuesta.content
 
 
-def test_compra_con_tarjeta_redirige_a_mercado_pago(cliente):
+def test_compra_con_tarjeta_redirige_a_mercado_pago_y_envia_email(cliente):
     registrar_y_autenticar(cliente)
     respuesta = cliente.post(
         "/comprar-entradas/",
@@ -169,6 +169,11 @@ def test_compra_con_tarjeta_redirige_a_mercado_pago(cliente):
     assert respuesta.headers["Location"].startswith(
         "https://mercadopago.test/"
     )
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].to == ["ana@example.com"]
+    assert "Entradas: 2" in mail.outbox[0].body
+    fecha_mostrada = fecha_habil_futura().strftime("%d/%m/%Y")
+    assert fecha_mostrada in mail.outbox[0].body
 
 
 def test_compra_sin_medio_de_pago_muestra_error_y_no_envia_email(cliente):
