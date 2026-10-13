@@ -185,6 +185,7 @@ def comprar_entradas(request):
     )
 
     if compra.medio_pago == Compra.MedioPago.TARJETA:
+        enviar_confirmacion_compra(compra)
         separador = "&" if "?" in base_url else "?"
         return redirect(
             f"{base_url}{separador}"
