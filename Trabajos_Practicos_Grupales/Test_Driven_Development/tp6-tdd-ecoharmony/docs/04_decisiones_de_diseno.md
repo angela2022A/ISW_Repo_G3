@@ -29,6 +29,19 @@ realiza transacciones reales durante las pruebas.
 Fecha, cantidad, edad, pase y medio de pago se validan antes de confirmar compra,
 enviar email o redirigir a la pasarela.
 
+### D-06. Días de apertura
+
+El parque admite compras para fechas hábiles de lunes a viernes. La regla se
+valida tanto en el navegador como en el servidor, que es la validación
+autoritaria.
+
+### D-07. Envío de correo configurable
+
+En desarrollo se conserva el backend de consola. Al configurar `EMAIL_HOST` se
+activa SMTP, con host, puerto, TLS, usuario y contraseña leídos del entorno. Las
+credenciales no se incluyen en el repositorio; las pruebas continúan usando el
+backend local de Django.
+
 ## Decisiones que emerjan del ciclo
 
 | Etapa | Decisión / refactor | Motivo |
@@ -37,4 +50,4 @@ enviar email o redirigir a la pasarela.
 | GREEN | Se agregó una aplicación server-rendered con vistas, plantillas, autenticación y una tabla persistente de compras | Hacer pasar las pruebas web y permitir ejecutar la aplicación en local |
 | GREEN | Una compra en efectivo queda confirmada y envía correo; una compra con tarjeta queda pendiente y deriva a la URL de checkout configurada | No considerar pagado un pedido antes de que lo confirme la pasarela externa |
 | GREEN | El formulario calcula un total estimado en el navegador y vuelve a calcular el total en el servidor | Mostrar el importe al visitante y conservar el cálculo autoritativo al recibir la compra |
-| REFACTOR | Pendiente | — |
+| REFACTOR | La validación de fecha, cantidad y cada visitante se separó en funciones privadas específicas | Facilitar lectura y mantenimiento de `validar_compra` sin alterar reglas ni respuestas |

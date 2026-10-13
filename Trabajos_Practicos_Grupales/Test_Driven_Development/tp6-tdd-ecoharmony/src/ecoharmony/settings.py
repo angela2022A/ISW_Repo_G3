@@ -62,13 +62,28 @@ USE_I18N = True
 USE_TZ = True
 STATIC_URL = "static/"
 LOGIN_URL = "/iniciar-sesion/"
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", "true").lower() == "true"
+EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", "false").lower() == "true"
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
+EMAIL_TIMEOUT = 10
 EMAIL_BACKEND = os.environ.get(
     "DJANGO_EMAIL_BACKEND",
-    "django.core.mail.backends.console.EmailBackend",
+    (
+        "django.core.mail.backends.smtp.EmailBackend"
+        if EMAIL_HOST
+        else "django.core.mail.backends.console.EmailBackend"
+    ),
 )
 DEFAULT_FROM_EMAIL = os.environ.get(
     "DEFAULT_FROM_EMAIL",
     "entradas@ecoharmony.test",
+)
+EMAIL_CONFIRMATION_RECIPIENT = os.environ.get(
+    "EMAIL_CONFIRMATION_RECIPIENT",
+    "ecoharmony.g3.pruebas@yopmail.com",
 )
 PRECIO_ENTRADA_REGULAR = os.environ.get("PRECIO_ENTRADA_REGULAR", "1000")
 PRECIO_ENTRADA_VIP = os.environ.get("PRECIO_ENTRADA_VIP", "2000")

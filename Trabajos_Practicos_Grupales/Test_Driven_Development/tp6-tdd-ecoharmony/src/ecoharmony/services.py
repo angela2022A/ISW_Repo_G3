@@ -4,7 +4,10 @@ from decimal import Decimal, InvalidOperation
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.core.mail import send_mail
 from django.utils import timezone
+
+from .models import Compra
 
 
 class ErrorValidacionCompra(ValueError):
@@ -19,6 +22,20 @@ class CompraValidada:
     visitantes: list[dict[str, int | str]]
     medio_pago: str
     total: Decimal
+
+
+def enviar_confirmacion_compra(compra):
+    return send_mail(
+        subject="Confirmación de compra - EcoHarmony Park",
+        message=(
+            f"Compra confirmada. Entradas: {compra.cantidad_entradas}. "
+            f"Fecha de visita: {compra.fecha_visita.isoformat()}. "
+            f"Total: ${compra.total}."
+        ),
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[settings.EMAIL_CONFIRMATION_RECIPIENT],
+        fail_silently=False,
+    )
 
 
 def _precio_configurado(nombre):
@@ -38,10 +55,7 @@ def _precio_configurado(nombre):
     return precio
 
 
-def validar_compra(datos, hoy=None):
-    errores = []
-    hoy = hoy or timezone.localdate()
-
+def _validar_fecha_visita(datos, hoy, errores):
     try:
         fecha_visita = date.fromisoformat(datos.get("fecha_visita", ""))
     except (TypeError, ValueError):
@@ -50,40 +64,57 @@ def validar_compra(datos, hoy=None):
 
     if fecha_visita is not None and fecha_visita < hoy:
         errores.append("La fecha de visita no puede ser pasada.")
+    elif fecha_visita is not None and fecha_visita.weekday() >= 5:
+        errores.append("El parque abre de lunes a viernes.")
 
+    return fecha_visita
+
+
+def _validar_cantidad_entradas(datos, errores):
     try:
         cantidad = int(datos.get("cantidad_entradas", ""))
     except (TypeError, ValueError):
-        cantidad = 0
         errores.append("La cantidad de entradas debe estar entre 1 y 10.")
+        return 0
 
     if cantidad < 1 or cantidad > 10:
-        if "La cantidad de entradas debe estar entre 1 y 10." not in errores:
-            errores.append("La cantidad de entradas debe estar entre 1 y 10.")
+        errores.append("La cantidad de entradas debe estar entre 1 y 10.")
+
+    return cantidad
+
+
+def _validar_visitante(datos, numero, errores):
+    edad_texto = datos.get(f"edad_{numero}", "")
+    pase = datos.get(f"tipo_pase_{numero}", "")
+
+    try:
+        edad = int(edad_texto)
+        if edad < 0:
+            raise ValueError
+    except (TypeError, ValueError):
+        errores.append(
+            f"La edad del visitante {numero} debe ser un entero "
+            "no negativo."
+        )
+        edad = None
+
+    if pase not in ("regular", "vip"):
+        errores.append(f"El tipo de pase del visitante {numero} no es válido.")
+
+    return {"edad": edad, "tipo_pase": pase}
+
+
+def validar_compra(datos, hoy=None):
+    errores = []
+    hoy = hoy or timezone.localdate()
+
+    fecha_visita = _validar_fecha_visita(datos, hoy, errores)
+    cantidad = _validar_cantidad_entradas(datos, errores)
 
     visitantes = []
     if 1 <= cantidad <= 10:
         for numero in range(1, cantidad + 1):
-            edad_texto = datos.get(f"edad_{numero}", "")
-            pase = datos.get(f"tipo_pase_{numero}", "")
-
-            try:
-                edad = int(edad_texto)
-                if edad < 0:
-                    raise ValueError
-            except (TypeError, ValueError):
-                errores.append(
-                    f"La edad del visitante {numero} debe ser un entero "
-                    "no negativo."
-                )
-                edad = None
-
-            if pase not in ("regular", "vip"):
-                errores.append(
-                    f"El tipo de pase del visitante {numero} no es válido."
-                )
-
-            visitantes.append({"edad": edad, "tipo_pase": pase})
+            visitantes.append(_validar_visitante(datos, numero, errores))
 
     medio_pago = datos.get("medio_pago", "")
     if medio_pago not in ("efectivo", "tarjeta"):

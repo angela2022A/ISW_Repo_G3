@@ -46,6 +46,7 @@ TEMPLATES = [
 LOGIN_URL = "/iniciar-sesion/"
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 DEFAULT_FROM_EMAIL = "entradas@ecoharmony.test"
+EMAIL_CONFIRMATION_RECIPIENT = "ecoharmony.g3.pruebas@yopmail.com"
 PRECIO_ENTRADA_REGULAR = 1000
 PRECIO_ENTRADA_VIP = 2000
 MERCADO_PAGO_CHECKOUT_URL = "https://mercadopago.test/checkout"

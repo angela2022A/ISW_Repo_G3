@@ -2,19 +2,22 @@ from urllib.parse import urlencode
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, get_user_model, login
+from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ImproperlyConfigured
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.core.mail import send_mail
 from django.db import IntegrityError, transaction
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.http import require_POST
 
 from .models import Compra
-from .services import ErrorValidacionCompra, validar_compra
+from .services import (
+    ErrorValidacionCompra,
+    validar_compra,
+)
 
 
 def _contexto_formulario_compra(datos=None):
@@ -116,6 +119,12 @@ def iniciar_sesion(request):
     )
 
 
+@require_POST
+def cerrar_sesion(request):
+    logout(request)
+    return redirect("inicio")
+
+
 @login_required
 def comprar_entradas(request):
     if request.method == "GET":
@@ -181,16 +190,6 @@ def comprar_entradas(request):
             f"{urlencode({'external_reference': compra.pk})}"
         )
 
-    send_mail(
-        subject="Confirmación de compra - EcoHarmony Park",
-        message=(
-            f"Compra confirmada. Entradas: {compra.cantidad_entradas}. "
-            f"Fecha de visita: {compra.fecha_visita.isoformat()}. "
-            f"Total: ${compra.total}."
-        ),
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[request.user.email],
-    )
     total_mostrado = f"{compra.total:.2f}".rstrip("0").rstrip(".")
     return render(
         request,

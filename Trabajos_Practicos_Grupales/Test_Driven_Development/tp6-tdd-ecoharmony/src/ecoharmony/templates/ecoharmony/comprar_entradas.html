@@ -2,21 +2,22 @@
 {% block title %}Comprar entradas - EcoHarmony Park{% endblock %}
 {% block content %}
   <h1>Comprar entradas</h1>
-  <p class="muted">El parque abre todos los días. Seleccioná hoy o una fecha futura.</p>
+  <p class="muted">El parque abre de lunes a viernes. Seleccioná una fecha hábil igual o posterior a hoy.</p>
   <form method="post">
     {% csrf_token %}
     <label for="fecha_visita">Fecha de visita</label>
-    <input id="fecha_visita" name="fecha_visita" type="date" min="{% now 'Y-m-d' %}" value="{{ datos.fecha_visita|default:'' }}" required>
+    <input id="fecha_visita" name="fecha_visita" type="date" min="{% now 'Y-m-d' %}" value="{{ datos.fecha_visita|default:'' }}" aria-describedby="fecha_ayuda" required>
+    <small id="fecha_ayuda">Formato día/mes/año. Solo se permiten fechas de lunes a viernes.</small>
 
     <label for="cantidad_entradas">Cantidad de entradas (1 a 10)</label>
-    <input id="cantidad_entradas" name="cantidad_entradas" type="number" min="1" max="10" value="{{ cantidad_inicial }}" required>
+    <input id="cantidad_entradas" name="cantidad_entradas" type="text" inputmode="numeric" pattern="[0-9]{1,2}" value="{{ cantidad_inicial }}" required>
 
     <h2>Datos de visitantes</h2>
     {% for visitante in visitantes_formulario %}
       <section class="visitor" data-visitor="{{ visitante.numero }}"{% if visitante.numero > 1 %} hidden{% endif %}>
         <h3>Visitante {{ visitante.numero }}</h3>
         <label for="edad_{{ visitante.numero }}">Edad</label>
-        <input id="edad_{{ visitante.numero }}" name="edad_{{ visitante.numero }}" type="number" min="0" value="{{ visitante.edad }}" aria-label="Edad del visitante {{ visitante.numero }}">
+        <input id="edad_{{ visitante.numero }}" name="edad_{{ visitante.numero }}" type="text" inputmode="numeric" pattern="[0-9]+" value="{{ visitante.edad }}" aria-label="Edad del visitante {{ visitante.numero }}">
         <label for="tipo_pase_{{ visitante.numero }}">Tipo de pase</label>
         <select id="tipo_pase_{{ visitante.numero }}" name="tipo_pase_{{ visitante.numero }}">
           <option value="regular" data-price="{{ precio_regular }}"{% if visitante.tipo_pase == "regular" %} selected{% endif %}>Regular - ${{ precio_regular }}</option>
@@ -25,19 +26,32 @@
       </section>
     {% endfor %}
 
-    <label for="medio_pago">Forma de pago</label>
-    <select id="medio_pago" name="medio_pago" required>
-      <option value="">Seleccioná una forma de pago</option>
-      <option value="efectivo"{% if medio_pago == "efectivo" %} selected{% endif %}>Efectivo en boletería</option>
-      <option value="tarjeta"{% if medio_pago == "tarjeta" %} selected{% endif %}>Tarjeta (Mercado Pago)</option>
-    </select>
+    <fieldset class="payment-section">
+      <legend>Forma de pago</legend>
+      <label for="medio_pago">¿Cómo querés pagar?</label>
+      <select id="medio_pago" name="medio_pago" required>
+        <option value="">Seleccioná una forma de pago</option>
+        <option value="efectivo"{% if medio_pago == "efectivo" %} selected{% endif %}>Efectivo en boletería</option>
+        <option value="tarjeta"{% if medio_pago == "tarjeta" %} selected{% endif %}>Tarjeta (Mercado Pago)</option>
+      </select>
+    </fieldset>
     <p id="total_estimado" aria-live="polite">Total estimado: ${{ precio_regular }}</p>
     <button type="submit">Continuar con la compra</button>
   </form>
   <script>
     const cantidad = document.querySelector("#cantidad_entradas");
+    const fechaVisita = document.querySelector("#fecha_visita");
+    const formulario = document.querySelector("form");
     const visitantes = document.querySelectorAll("[data-visitor]");
     const totalEstimado = document.querySelector("#total_estimado");
+    const camposNumericos = document.querySelectorAll(
+      "#cantidad_entradas, [id^='edad_']",
+    );
+    camposNumericos.forEach((campo) => {
+      campo.addEventListener("input", () => {
+        campo.value = campo.value.replace(/\D/g, "");
+      });
+    });
     function mostrarVisitantes() {
       const limite = Number(cantidad.value);
       visitantes.forEach((visitante) => {
@@ -57,7 +71,26 @@
         maximumFractionDigits: 2,
       }).format(total)}`;
     }
-    cantidad.addEventListener("input", mostrarVisitantes);
+    cantidad.addEventListener("input", () => {
+      const valor = Number(cantidad.value);
+      cantidad.setCustomValidity(
+        cantidad.value && (valor < 1 || valor > 10)
+          ? "La cantidad debe estar entre 1 y 10."
+          : "",
+      );
+      mostrarVisitantes();
+    });
+    formulario.addEventListener("submit", (evento) => {
+      const seleccionada = new Date(`${fechaVisita.value}T00:00:00`);
+      const esFinDeSemana =
+        seleccionada.getDay() === 0 || seleccionada.getDay() === 6;
+      fechaVisita.setCustomValidity(
+        esFinDeSemana ? "El parque abre de lunes a viernes." : "",
+      );
+      if (!formulario.reportValidity()) {
+        evento.preventDefault();
+      }
+    });
     document.querySelectorAll("[data-visitor] select").forEach((pase) => {
       pase.addEventListener("change", actualizarTotal);
     });
