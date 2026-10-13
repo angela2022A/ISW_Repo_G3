@@ -16,6 +16,7 @@ from django.views.decorators.http import require_POST
 from .models import Compra
 from .services import (
     ErrorValidacionCompra,
+    enviar_confirmacion_compra,
     validar_compra,
 )
 
@@ -189,7 +190,7 @@ def comprar_entradas(request):
             f"{base_url}{separador}"
             f"{urlencode({'external_reference': compra.pk})}"
         )
-
+    enviar_confirmacion_compra(compra)
     total_mostrado = f"{compra.total:.2f}".rstrip("0").rstrip(".")
     return render(
         request,
