@@ -1,0 +1,15 @@
+{% extends "ecoharmony/base.html" %}
+{% block title %}Iniciar sesión - EcoHarmony Park{% endblock %}
+{% block content %}
+  <h1>Iniciar sesión</h1>
+  {% if error %}<p class="errors">{{ error }}</p>{% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <label for="username">Email</label>
+    <input id="username" name="username" type="email" autocomplete="email" required>
+    <label for="password">Contraseña</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" required>
+    <button type="submit">Ingresar</button>
+  </form>
+  <p class="muted">¿No tenés cuenta? <a href="/registro/">Registrate</a>.</p>
+{% endblock %}

@@ -1,3 +1,7 @@
-"""URLConf de pruebas, pendiente de conectar a las vistas en GREEN."""
+"""URLs web incluidas en la configuración de pruebas."""
 
-urlpatterns = []
+from django.urls import include, path
+
+urlpatterns = [
+    path("", include("ecoharmony.urls")),
+]

@@ -24,9 +24,9 @@ internas como sustituto de la interfaz web.
 - El envío de correo usa el backend local de Django, sin servicios externos.
 - La URL de Mercado Pago en pruebas usa el dominio reservado `mercadopago.test`.
 
-## Estado de la etapa RED
+## Resultado de los ciclos
 
-Las pruebas describen rutas HTTP todavía no implementadas y deben fallar hasta
-que se complete GREEN. No se consideran válidas como RED fallas de importación,
-configuración o dependencias; el resultado esperado es un rechazo HTTP por rutas
-aún no conectadas.
+En RED, las nueve pruebas fallaron porque las rutas HTTP aún no estaban
+implementadas (HTTP 404). Después de implementar GREEN, las mismas nueve pruebas
+pasaron contra la aplicación web. No se consideran válidas como RED fallas de
+importación, configuración o dependencias.

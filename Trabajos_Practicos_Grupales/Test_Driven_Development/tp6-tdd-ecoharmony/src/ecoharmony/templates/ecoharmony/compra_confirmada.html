@@ -1,0 +1,10 @@
+{% extends "ecoharmony/base.html" %}
+{% block title %}Compra confirmada - EcoHarmony Park{% endblock %}
+{% block content %}
+  <h1>Compra confirmada</h1>
+  <p>Entradas: {{ compra.cantidad_entradas }}</p>
+  <p>Fecha de visita: {{ compra.fecha_visita|date:"Y-m-d" }}</p>
+  <p>Total: ${{ total_mostrado }}</p>
+  <p>Enviamos el mensaje de confirmación a {{ user.email }}.</p>
+  <a class="button" href="/">Volver al inicio</a>
+{% endblock %}

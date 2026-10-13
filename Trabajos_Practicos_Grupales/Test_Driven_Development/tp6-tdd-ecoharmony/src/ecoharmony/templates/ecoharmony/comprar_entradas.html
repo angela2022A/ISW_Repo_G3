@@ -1,0 +1,66 @@
+{% extends "ecoharmony/base.html" %}
+{% block title %}Comprar entradas - EcoHarmony Park{% endblock %}
+{% block content %}
+  <h1>Comprar entradas</h1>
+  <p class="muted">El parque abre todos los días. Seleccioná hoy o una fecha futura.</p>
+  <form method="post">
+    {% csrf_token %}
+    <label for="fecha_visita">Fecha de visita</label>
+    <input id="fecha_visita" name="fecha_visita" type="date" min="{% now 'Y-m-d' %}" value="{{ datos.fecha_visita|default:'' }}" required>
+
+    <label for="cantidad_entradas">Cantidad de entradas (1 a 10)</label>
+    <input id="cantidad_entradas" name="cantidad_entradas" type="number" min="1" max="10" value="{{ cantidad_inicial }}" required>
+
+    <h2>Datos de visitantes</h2>
+    {% for visitante in visitantes_formulario %}
+      <section class="visitor" data-visitor="{{ visitante.numero }}"{% if visitante.numero > 1 %} hidden{% endif %}>
+        <h3>Visitante {{ visitante.numero }}</h3>
+        <label for="edad_{{ visitante.numero }}">Edad</label>
+        <input id="edad_{{ visitante.numero }}" name="edad_{{ visitante.numero }}" type="number" min="0" value="{{ visitante.edad }}" aria-label="Edad del visitante {{ visitante.numero }}">
+        <label for="tipo_pase_{{ visitante.numero }}">Tipo de pase</label>
+        <select id="tipo_pase_{{ visitante.numero }}" name="tipo_pase_{{ visitante.numero }}">
+          <option value="regular" data-price="{{ precio_regular }}"{% if visitante.tipo_pase == "regular" %} selected{% endif %}>Regular - ${{ precio_regular }}</option>
+          <option value="vip" data-price="{{ precio_vip }}"{% if visitante.tipo_pase == "vip" %} selected{% endif %}>VIP - ${{ precio_vip }}</option>
+        </select>
+      </section>
+    {% endfor %}
+
+    <label for="medio_pago">Forma de pago</label>
+    <select id="medio_pago" name="medio_pago" required>
+      <option value="">Seleccioná una forma de pago</option>
+      <option value="efectivo"{% if medio_pago == "efectivo" %} selected{% endif %}>Efectivo en boletería</option>
+      <option value="tarjeta"{% if medio_pago == "tarjeta" %} selected{% endif %}>Tarjeta (Mercado Pago)</option>
+    </select>
+    <p id="total_estimado" aria-live="polite">Total estimado: ${{ precio_regular }}</p>
+    <button type="submit">Continuar con la compra</button>
+  </form>
+  <script>
+    const cantidad = document.querySelector("#cantidad_entradas");
+    const visitantes = document.querySelectorAll("[data-visitor]");
+    const totalEstimado = document.querySelector("#total_estimado");
+    function mostrarVisitantes() {
+      const limite = Number(cantidad.value);
+      visitantes.forEach((visitante) => {
+        visitante.hidden = Number(visitante.dataset.visitor) > limite;
+      });
+      actualizarTotal();
+    }
+    function actualizarTotal() {
+      let total = 0;
+      visitantes.forEach((visitante) => {
+        if (!visitante.hidden) {
+          const pase = visitante.querySelector("select");
+          total += Number(pase.selectedOptions[0].dataset.price);
+        }
+      });
+      totalEstimado.textContent = `Total estimado: $${new Intl.NumberFormat("es-AR", {
+        maximumFractionDigits: 2,
+      }).format(total)}`;
+    }
+    cantidad.addEventListener("input", mostrarVisitantes);
+    document.querySelectorAll("[data-visitor] select").forEach((pase) => {
+      pase.addEventListener("change", actualizarTotal);
+    });
+    mostrarVisitantes();
+  </script>
+{% endblock %}

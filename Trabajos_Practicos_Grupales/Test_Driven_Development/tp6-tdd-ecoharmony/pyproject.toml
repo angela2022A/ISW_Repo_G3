@@ -1,5 +1,5 @@
 [project]
-name = "ecoharmony-inscripcion"
+name = "ecoharmony-comprar-entradas"
 version = "0.1.0"
 description = "TP6 TDD - Aplicación web para comprar entradas a EcoHarmony Park"
 requires-python = ">=3.10"

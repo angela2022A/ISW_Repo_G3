@@ -1,0 +1,19 @@
+{% extends "ecoharmony/base.html" %}
+{% block title %}Crear cuenta - EcoHarmony Park{% endblock %}
+{% block content %}
+  <h1>Crear cuenta</h1>
+  <p>Registrate para comprar tus entradas.</p>
+  {% if errores %}
+    <ul class="errors">{% for error in errores %}<li>{{ error }}</li>{% endfor %}</ul>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" autocomplete="email" required>
+    <label for="password">Contraseña</label>
+    <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required>
+    <label for="confirmar_password">Confirmar contraseña</label>
+    <input id="confirmar_password" name="confirmar_password" type="password" autocomplete="new-password" minlength="8" required>
+    <button type="submit">Registrarme</button>
+  </form>
+{% endblock %}

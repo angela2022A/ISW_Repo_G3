@@ -1,0 +1,14 @@
+{% extends "ecoharmony/base.html" %}
+{% block title %}EcoHarmony Park - Entradas{% endblock %}
+{% block content %}
+  <h1>EcoHarmony Park</h1>
+  <p>Viví la naturaleza y planificá tu visita al parque.</p>
+  <h2>Comprar entradas</h2>
+  <p>Elegí tu fecha, cantidad de entradas y pase para cada visitante.</p>
+  {% if user.is_authenticated %}
+    <a class="button" href="/comprar-entradas/">Comprar entradas</a>
+  {% else %}
+    <a class="button" href="/registro/">Registrate para comprar</a>
+    <p class="muted">¿Ya tenés cuenta? <a href="/iniciar-sesion/">Iniciá sesión</a>.</p>
+  {% endif %}
+{% endblock %}

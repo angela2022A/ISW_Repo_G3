@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}EcoHarmony Park{% endblock %}</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; color: #17352b; background: #f3f7f1; }
+    body { margin: 0; }
+    header { background: #174b38; color: white; padding: 1rem max(1.25rem, calc((100% - 900px) / 2)); }
+    header a { color: white; margin-right: 1rem; }
+    main { box-sizing: border-box; width: min(100% - 2rem, 760px); margin: 2rem auto; background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 8px 30px #17352b12; }
+    h1, h2 { color: #174b38; }
+    label { display: block; margin: .75rem 0 .25rem; font-weight: 600; }
+    input, select, button { box-sizing: border-box; font: inherit; padding: .65rem; border: 1px solid #a9bdb2; border-radius: .4rem; }
+    input, select { width: 100%; }
+    button, .button { display: inline-block; margin-top: 1rem; padding: .7rem 1rem; background: #176b4a; border: 0; color: white; text-decoration: none; border-radius: .4rem; cursor: pointer; }
+    .errors, .messages { padding: .75rem 1rem; border-radius: .5rem; background: #fff1e9; color: #7d2f18; }
+    .visitor { border-top: 1px solid #dce7df; margin-top: 1rem; padding-top: .5rem; }
+    .visitor[hidden] { display: none; }
+    .muted { color: #51685c; }
+    @media (max-width: 520px) { main { padding: 1.25rem; } }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/">EcoHarmony Park</a>
+    {% if user.is_authenticated %}
+      <a href="/comprar-entradas/">Comprar entradas</a>
+      <span>{{ user.email }}</span>
+    {% else %}
+      <a href="/iniciar-sesion/">Iniciar sesión</a>
+      <a href="/registro/">Registrarse</a>
+    {% endif %}
+  </header>
+  <main>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

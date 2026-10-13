@@ -33,6 +33,8 @@ enviar email o redirigir a la pasarela.
 
 | Etapa | Decisión / refactor | Motivo |
 |---|---|---|
-| RED | Pendiente de ejecución | — |
-| GREEN | Pendiente | — |
+| RED | Se escribieron nueve pruebas HTTP contra la aplicación Django | Verificar los criterios desde las rutas que usa un visitante |
+| GREEN | Se agregó una aplicación server-rendered con vistas, plantillas, autenticación y una tabla persistente de compras | Hacer pasar las pruebas web y permitir ejecutar la aplicación en local |
+| GREEN | Una compra en efectivo queda confirmada y envía correo; una compra con tarjeta queda pendiente y deriva a la URL de checkout configurada | No considerar pagado un pedido antes de que lo confirme la pasarela externa |
+| GREEN | El formulario calcula un total estimado en el navegador y vuelve a calcular el total en el servidor | Mostrar el importe al visitante y conservar el cálculo autoritativo al recibir la compra |
 | REFACTOR | Pendiente | — |
