@@ -11,7 +11,7 @@
 | # | Regla |
 |---|---|
 | R1 | Solo usuarios registrados e iniciados pueden comprar entradas. |
-| R2 | Se elige una fecha de visita de hoy en adelante; el parque abre todos los días. |
+| R2 | Se elige una fecha de visita de hoy en adelante, de lunes a viernes. |
 | R3 | La cantidad está entre 1 y 10 entradas. |
 | R4 | Para cada entrada se indica la edad y el tipo de pase (regular o VIP). |
 | R5 | Se muestra el monto total calculado con el precio correspondiente a cada pase. |
@@ -23,6 +23,8 @@
 
 - Los precios regular y VIP son provisorios y se configuran fuera del código.
 - La fecha de hoy es válida; las fechas pasadas no.
+- El parque abre de lunes a viernes. El enunciado no define los días de
+  apertura, por lo que es un supuesto del grupo.
 - No se simula un cobro real ni se integra con credenciales de Mercado Pago en las
   pruebas. Se verifica la redirección usando una URL de prueba configurable.
 - El usuario se identifica con email y contraseña.
