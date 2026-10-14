@@ -42,6 +42,12 @@ activa SMTP, con host, puerto, TLS, usuario y contraseña leídos del entorno. L
 credenciales no se incluyen en el repositorio; las pruebas continúan usando el
 backend local de Django.
 
+### D-08. Guía de estilo de código
+El código sigue la guía seleccionada por el grupo en el TP2: PEP 8. Se
+respetan líneas de hasta 79 caracteres, imports al inicio del archivo y
+nombres en snake_case.
+
+
 ## Decisiones que emerjan del ciclo
 
 | Etapa | Decisión / refactor | Motivo |
