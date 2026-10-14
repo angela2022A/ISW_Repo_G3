@@ -18,7 +18,9 @@ class Command(BaseCommand):
         if usuario is not None:
             self.stdout.write(
                 self.style.WARNING(
-                    f"La cuenta {EMAIL_COMPARTIDO} ya existe en esta base local."
+                    f"La cuenta {EMAIL_COMPARTIDO} ya existe " 
+                    "en esta base local."
+
                 )
             )
             return
