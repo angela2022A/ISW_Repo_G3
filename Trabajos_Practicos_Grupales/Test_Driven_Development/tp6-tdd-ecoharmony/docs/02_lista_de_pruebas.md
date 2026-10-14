@@ -8,7 +8,7 @@ internas como sustituto de la interfaz web.
 |---|---|---|---|---|
 | W1 | Abrir la página principal | — | Se muestra acceso a comprar entradas | `test_inicio_web_muestra_acceso_a_compra_de_entradas` |
 | W2 | Usuario anónimo intenta comprar | R1 | Redirección al inicio de sesión | `test_visitante_sin_registro_no_puede_iniciar_una_compra` |
-| W3 | Registrarse, iniciar sesión y comprar en efectivo | R1–R8 | Confirmación con fecha y cantidad; mensaje de correo simulado, sin envío real | `test_compra_en_efectivo_confirma_sin_enviar_email_real` |
+| W3 | Registrarse, iniciar sesión y comprar en efectivo | R1–R8 | Confirmación con fecha y cantidad; mensaje de correo simulado, sin envío real | `test_compra_en_efectivo_envia_mail_de_confirmacion_al_usuario` |
 | W4 | Comprar pases regular y VIP | R4–R5 | Total calculado con los precios configurados | `test_compra_calcula_total_segun_pase_de_cada_visitante` |
 | W5 | Comprar con tarjeta | R6–R7 | Redirección a Mercado Pago | `test_compra_con_tarjeta_redirige_a_mercado_pago` |
 | W6 | Omitir el medio de pago | R6 | Error visible y sin email de confirmación | `test_compra_sin_medio_de_pago_muestra_error_y_no_envia_email` |
