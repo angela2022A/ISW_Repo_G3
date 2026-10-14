@@ -124,30 +124,22 @@ def test_compra_en_efectivo_confirma_sin_enviar_email_real(cliente):
         follow=True,
     )
 
+    fecha_mostrada = fecha_habil_futura().strftime("%d/%m/%Y")
     assert respuesta.status_code == 200
+    assert len(mail.outbox) == 1
+    mensaje = mail.outbox[0]
+    assert mensaje.to == ["ana@example.com"]
+    assert "Entradas: 2" in mensaje.body
+    assert fecha_mostrada in mensaje.body
     assert b"Compra confirmada" in respuesta.content
     assert b"Entradas: 2" in respuesta.content
-    fecha_mostrada = fecha_habil_futura().strftime("%d/%m/%Y")
     assert fecha_mostrada.encode() in respuesta.content
-    assert b"Mail enviado (simulado)." in respuesta.content
-    assert len(mail.outbox) == 0
+    assert "Te enviamos la confirmación a ana@example.com".encode() in (
+        respuesta.content
+    )
 
 
-def test_compra_no_envia_email_aunque_smtp_este_configurado(cliente):
-    registrar_y_autenticar(cliente)
 
-    with override_settings(
-        EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend",
-    ):
-        respuesta = cliente.post(
-            "/comprar-entradas/",
-            datos_compra(),
-            follow=True,
-        )
-
-    assert respuesta.status_code == 200
-    assert b"Mail enviado (simulado)." in respuesta.content
-    assert len(mail.outbox) == 0
 
 
 @override_settings(
@@ -166,7 +158,7 @@ def test_compra_calcula_total_segun_pase_de_cada_visitante(cliente):
     assert b"Total: $3000" in respuesta.content
 
 
-def test_compra_con_tarjeta_redirige_a_mercado_pago(cliente):
+def test_compra_con_tarjeta_redirige_a_mercado_pago_y_envia_email(cliente):
     registrar_y_autenticar(cliente)
     respuesta = cliente.post(
         "/comprar-entradas/",
@@ -177,6 +169,11 @@ def test_compra_con_tarjeta_redirige_a_mercado_pago(cliente):
     assert respuesta.headers["Location"].startswith(
         "https://mercadopago.test/"
     )
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].to == ["ana@example.com"]
+    assert "Entradas: 2" in mail.outbox[0].body
+    fecha_mostrada = fecha_habil_futura().strftime("%d/%m/%Y")
+    assert fecha_mostrada in mail.outbox[0].body
 
 
 def test_compra_sin_medio_de_pago_muestra_error_y_no_envia_email(cliente):
