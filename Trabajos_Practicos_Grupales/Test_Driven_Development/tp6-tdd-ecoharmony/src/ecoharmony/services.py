@@ -8,7 +8,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import send_mail
 from django.utils import timezone
 
-from .models import Compra
+
 
 
 class ErrorValidacionCompra(ValueError):

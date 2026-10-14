@@ -1,1 +1,1 @@
-"""EcoHarmony Park - US 'Inscribirme a actividad'."""
+"""EcoHarmony Park - US 'Comprar entradas'."""
