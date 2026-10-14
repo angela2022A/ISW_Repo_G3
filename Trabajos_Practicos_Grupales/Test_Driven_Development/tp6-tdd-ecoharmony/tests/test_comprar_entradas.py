@@ -116,7 +116,7 @@ def test_formulario_separa_forma_de_pago_de_datos_de_visitantes(cliente):
     )
 
 
-def test_compra_en_efectivo_confirma_sin_enviar_email_real(cliente):
+def test_compra_en_efectivo_envia_mail_de_confirmacion_al_usuario(cliente):
     registrar_y_autenticar(cliente)
     respuesta = cliente.post(
         "/comprar-entradas/",
