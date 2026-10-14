@@ -16,6 +16,7 @@ from django.views.decorators.http import require_POST
 from .models import Compra
 from .services import (
     ErrorValidacionCompra,
+    enviar_confirmacion_compra,
     validar_compra,
 )
 
@@ -182,6 +183,7 @@ def comprar_entradas(request):
         total=compra_validada.total,
         estado=estado,
     )
+    enviar_confirmacion_compra(compra)
 
     if compra.medio_pago == Compra.MedioPago.TARJETA:
         separador = "&" if "?" in base_url else "?"
