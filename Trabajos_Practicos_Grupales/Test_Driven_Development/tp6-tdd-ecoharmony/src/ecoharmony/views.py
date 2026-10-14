@@ -183,6 +183,7 @@ def comprar_entradas(request):
         total=compra_validada.total,
         estado=estado,
     )
+    enviar_confirmacion_compra(compra)
 
     if compra.medio_pago == Compra.MedioPago.TARJETA:
         separador = "&" if "?" in base_url else "?"
@@ -190,7 +191,7 @@ def comprar_entradas(request):
             f"{base_url}{separador}"
             f"{urlencode({'external_reference': compra.pk})}"
         )
-    enviar_confirmacion_compra(compra)
+
     total_mostrado = f"{compra.total:.2f}".rstrip("0").rstrip(".")
     return render(
         request,
