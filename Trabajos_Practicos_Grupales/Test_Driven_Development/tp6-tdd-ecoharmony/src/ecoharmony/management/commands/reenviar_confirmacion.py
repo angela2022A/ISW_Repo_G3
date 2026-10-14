@@ -69,7 +69,7 @@ class Command(BaseCommand):
         self.stdout.write(
             self.style.SUCCESS(
                 f"Confirmación de compra {compra.pk} enviada al servidor "
-                f"SMTP para {settings.EMAIL_CONFIRMATION_RECIPIENT}. "
+                f"SMTP para {compra.usuario.email}. "
                 "Revisá también los registros de entrega del proveedor."
             )
         )

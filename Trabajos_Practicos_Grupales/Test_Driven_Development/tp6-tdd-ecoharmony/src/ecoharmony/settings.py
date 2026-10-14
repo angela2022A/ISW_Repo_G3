@@ -81,10 +81,7 @@ DEFAULT_FROM_EMAIL = os.environ.get(
     "DEFAULT_FROM_EMAIL",
     "entradas@ecoharmony.test",
 )
-EMAIL_CONFIRMATION_RECIPIENT = os.environ.get(
-    "EMAIL_CONFIRMATION_RECIPIENT",
-    "ecoharmony.g3.pruebas@yopmail.com",
-)
+
 PRECIO_ENTRADA_REGULAR = os.environ.get("PRECIO_ENTRADA_REGULAR", "1000")
 PRECIO_ENTRADA_VIP = os.environ.get("PRECIO_ENTRADA_VIP", "2000")
 MERCADO_PAGO_CHECKOUT_URL = os.environ.get(

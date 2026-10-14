@@ -1,14 +1,4 @@
-# Confirmaciones por correo
-
-Por ahora las compras **no envían correo real**. La pantalla muestra
-«Mail enviado (simulado)» como texto de demostración. La aplicación mantiene la
-configuración para probar o reactivar el envío mediante el comando manual de
-reenvío descrito abajo. El destinatario predeterminado es
-`ecoharmony.g3.pruebas@yopmail.com`; se puede cambiar con
-`EMAIL_CONFIRMATION_RECIPIENT`. La dirección también se usa para la cuenta
-genérica de EcoHarmony.
-
-## Crear el usuario genérico compartido
+# Crear el usuario genérico compartido
 
 Cada integrante debe crear el usuario en su propia base de datos local. Desde
 PowerShell, en la carpeta del proyecto, ejecutá:
@@ -55,7 +45,6 @@ $env:EMAIL_HOST_USER = Read-Host "Usuario SMTP de Mailtrap"
 $claveSmtp = Read-Host "Contraseña SMTP de Mailtrap" -AsSecureString
 $env:EMAIL_HOST_PASSWORD = [System.Net.NetworkCredential]::new("", $claveSmtp).Password
 $env:DEFAULT_FROM_EMAIL = "ecoharmony@example.test"
-$env:EMAIL_CONFIRMATION_RECIPIENT = "ecoharmony.g3.pruebas@yopmail.com"
 python manage.py runserver
 ```
 
@@ -96,7 +85,6 @@ $claveAplicacion = Read-Host "Contraseña de aplicación de Google" -AsSecureStr
 $env:EMAIL_HOST_PASSWORD = [System.Net.NetworkCredential]::new("", $claveAplicacion).Password
 Remove-Variable claveAplicacion
 $env:DEFAULT_FROM_EMAIL = $env:EMAIL_HOST_USER
-$env:EMAIL_CONFIRMATION_RECIPIENT = "ecoharmony.g3.pruebas@yopmail.com"
 python manage.py reenviar_confirmacion 8
 ```
 
@@ -143,7 +131,6 @@ $tokenSmtp = Read-Host "Token SMTP de Mailtrap Email Sending" -AsSecureString
 $env:EMAIL_HOST_PASSWORD = [System.Net.NetworkCredential]::new("", $tokenSmtp).Password
 Remove-Variable tokenSmtp
 $env:DEFAULT_FROM_EMAIL = Read-Host "Remitente verificado (por ejemplo, entradas@tu-dominio.com)"
-$env:EMAIL_CONFIRMATION_RECIPIENT = "ecoharmony.g3.pruebas@yopmail.com"
 python manage.py runserver
 ```
 
