@@ -96,26 +96,34 @@ También podés registrarte con una cuenta propia desde la web.
 
 1. Registrate en `/registro/` o iniciá sesión en `/iniciar-sesion/`.
 2. Abrí **Comprar entradas**.
-3. Seleccioná en el calendario una fecha igual o posterior a hoy. Debe ser de
-   lunes a viernes; el navegador configurado en español de Argentina la muestra
-   como día/mes/año.
-4. Indicá entre 1 y 10 entradas. Para cada visitante visible, ingresá la edad
-   y elegí el pase Regular o VIP.
+3. Seleccioná una fecha desde hoy hasta un mes de anticipación. El parque cierra
+   los lunes, el 25 de diciembre y el 1 de enero; la compra para el mismo día
+   está disponible hasta las 17:30. El navegador configurado en español de
+   Argentina muestra la fecha como día/mes/año.
+4. Indicá entre 1 y 10 entradas por transacción. Para cada visitante visible,
+   ingresá la edad y elegí el pase Común o VIP. El límite total por usuario y
+   fecha es de 10 entradas, incluso si se hacen varias compras.
 5. Seleccioná la forma de pago y verificá el total estimado.
 6. Enviá la compra. Para efectivo se muestra la confirmación con la cantidad,
-   la fecha y el total.
+   la fecha y el total. Para tarjeta se muestra el checkout simulado de Mercado
+   Pago. Ambos recorridos muestran la confirmación de correo simulada.
 
 ### Comportamientos a comprobar
 
-- Las fechas pasadas y los fines de semana se rechazan también en el servidor.
+- Las fechas pasadas, los lunes, el 25 de diciembre y el 1 de enero se rechazan
+  también en el servidor.
 - Cantidad y edades son campos numéricos: se eliminan letras al escribir y el
   servidor vuelve a validar lo recibido.
 - La forma de pago aparece en una sección separada de los visitantes.
-- Los precios predeterminados son `$1000` para Regular y `$2000` para VIP.
-- La opción de tarjeta redirige a una URL de prueba de Mercado Pago. **No
-  procesa pagos reales.**
-- La confirmación dice **“Mail enviado (simulado)”**. El envío de correos reales
-  está desactivado.
+- Los precios predeterminados son `$10.000` para Común y `$20.000` para VIP.
+- Hasta 3 años no pagan; de 4 a 15 años y desde los 60 años tienen 50% de
+  descuento.
+- Cada usuario puede comprar como máximo 10 entradas para una fecha, sumando
+  todas sus transacciones.
+- La tarjeta muestra una pantalla local de Mercado Pago simulado. **No procesa
+  pagos reales.**
+- La confirmación muestra el modal **“Mail enviado (simulado)”**. La compra no
+  envía correos reales.
 
 ## Ejecutar las pruebas desde VS Code
 

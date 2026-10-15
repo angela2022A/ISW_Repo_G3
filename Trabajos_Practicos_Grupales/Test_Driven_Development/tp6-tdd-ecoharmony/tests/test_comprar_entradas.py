@@ -1,11 +1,11 @@
 """Pruebas web de la US «Comprar entradas», escritas para la etapa RED."""
 
-from datetime import date, timedelta
+from datetime import date, datetime, time, timedelta
 from io import StringIO
 import pytest
-from django.core import mail
 from django.core.management import call_command
-from django.test import Client, override_settings
+from django.test import Client
+from ecoharmony.services import fecha_maxima_compra
 
 from ecoharmony.models import Compra
 
@@ -15,12 +15,6 @@ pytestmark = pytest.mark.django_db
 @pytest.fixture
 def cliente():
     return Client()
-
-
-@pytest.fixture(autouse=True)
-def limpiar_emails():
-    mail.get_connection()
-    mail.outbox.clear()
 
 
 def registrar_y_autenticar(cliente):
@@ -57,7 +51,10 @@ def datos_compra(**cambios):
 
 def fecha_habil_futura():
     fecha = date.today() + timedelta(days=1)
-    while fecha.weekday() >= 5:
+    while fecha.weekday() == 0 or (fecha.month, fecha.day) in {
+        (12, 25),
+        (1, 1),
+    }:
         fecha += timedelta(days=1)
     return fecha
 
@@ -116,7 +113,7 @@ def test_formulario_separa_forma_de_pago_de_datos_de_visitantes(cliente):
     )
 
 
-def test_compra_en_efectivo_envia_mail_de_confirmacion_al_usuario(cliente):
+def test_compra_en_efectivo_muestra_confirmacion_de_mail_simulado(cliente):
     registrar_y_autenticar(cliente)
     respuesta = cliente.post(
         "/comprar-entradas/",
@@ -126,26 +123,12 @@ def test_compra_en_efectivo_envia_mail_de_confirmacion_al_usuario(cliente):
 
     fecha_mostrada = fecha_habil_futura().strftime("%d/%m/%Y")
     assert respuesta.status_code == 200
-    assert len(mail.outbox) == 1
-    mensaje = mail.outbox[0]
-    assert mensaje.to == ["ana@example.com"]
-    assert "Entradas: 2" in mensaje.body
-    assert fecha_mostrada in mensaje.body
     assert b"Compra confirmada" in respuesta.content
     assert b"Entradas: 2" in respuesta.content
     assert fecha_mostrada.encode() in respuesta.content
-    assert "Te enviamos la confirmación a ana@example.com".encode() in (
-        respuesta.content
-    )
+    assert b"Mail enviado (simulado) a ana@example.com" in respuesta.content
 
 
-
-
-
-@override_settings(
-    PRECIO_ENTRADA_REGULAR=1000,
-    PRECIO_ENTRADA_VIP=2000,
-)
 def test_compra_calcula_total_segun_pase_de_cada_visitante(cliente):
     registrar_y_autenticar(cliente)
     respuesta = cliente.post(
@@ -153,30 +136,26 @@ def test_compra_calcula_total_segun_pase_de_cada_visitante(cliente):
         datos_compra(),
         follow=True,
     )
-
     assert respuesta.status_code == 200
-    assert b"Total: $3000" in respuesta.content
+    assert b"Total: $20000" in respuesta.content
 
 
-def test_compra_con_tarjeta_redirige_a_mercado_pago_y_envia_email(cliente):
+def test_compra_con_tarjeta_muestra_checkout_simulado(cliente):
     registrar_y_autenticar(cliente)
     respuesta = cliente.post(
         "/comprar-entradas/",
         datos_compra(medio_pago="tarjeta"),
     )
-
     assert respuesta.status_code == 302
-    assert respuesta.headers["Location"].startswith(
-        "https://mercadopago.test/"
-    )
-    assert len(mail.outbox) == 1
-    assert mail.outbox[0].to == ["ana@example.com"]
-    assert "Entradas: 2" in mail.outbox[0].body
-    fecha_mostrada = fecha_habil_futura().strftime("%d/%m/%Y")
-    assert fecha_mostrada in mail.outbox[0].body
+    assert "/pago-tarjeta-simulado/" in respuesta.headers["Location"]
+    respuesta = cliente.get(respuesta.headers["Location"])
+    assert respuesta.status_code == 200
+    assert b"Mercado Pago Compra Exitosa" in respuesta.content
+    assert b"no se realiz\xc3\xb3 ning\xc3\xban cobro" in respuesta.content
+    assert b"Mail enviado (simulado) a ana@example.com" in respuesta.content
 
 
-def test_compra_sin_medio_de_pago_muestra_error_y_no_envia_email(cliente):
+def test_compra_sin_medio_de_pago_muestra_error_y_no_crea_compra(cliente):
     registrar_y_autenticar(cliente)
     respuesta = cliente.post(
         "/comprar-entradas/",
@@ -185,7 +164,7 @@ def test_compra_sin_medio_de_pago_muestra_error_y_no_envia_email(cliente):
 
     assert respuesta.status_code == 200
     assert b"Seleccion" in respuesta.content
-    assert len(mail.outbox) == 0
+    assert Compra.objects.count() == 0
 
 
 def test_compra_rechaza_fecha_anterior_a_hoy(cliente):
@@ -201,18 +180,17 @@ def test_compra_rechaza_fecha_anterior_a_hoy(cliente):
     assert b"fecha" in respuesta.content.lower()
 
 
-@pytest.mark.parametrize("dia_semana", (5, 6))
-def test_compra_rechaza_fines_de_semana(cliente, dia_semana):
+def test_compra_rechaza_los_lunes(cliente):
     registrar_y_autenticar(cliente)
-    dias_hasta_fecha = (dia_semana - date.today().weekday()) % 7 or 7
-    fecha_fin_semana = date.today() + timedelta(days=dias_hasta_fecha)
+    dias_hasta_lunes = (0 - date.today().weekday()) % 7 or 7
+    lunes = date.today() + timedelta(days=dias_hasta_lunes)
     respuesta = cliente.post(
         "/comprar-entradas/",
-        datos_compra(fecha_visita=fecha_fin_semana.isoformat()),
+        datos_compra(fecha_visita=lunes.isoformat()),
     )
 
     assert respuesta.status_code == 200
-    assert b"lunes a viernes" in respuesta.content
+    assert b"cerrado los lunes" in respuesta.content
     assert Compra.objects.count() == 0
 
 
@@ -234,6 +212,180 @@ def test_compra_rechaza_mas_de_diez_entradas(cliente):
 
     assert respuesta.status_code == 200
     assert b"10" in respuesta.content
+
+
+def test_compra_rechaza_mas_de_diez_entradas_acumuladas_por_fecha(cliente):
+    registrar_y_autenticar(cliente)
+    fecha = fecha_habil_futura().isoformat()
+
+    for cantidad in (6, 5):
+        datos = {
+            "fecha_visita": fecha,
+            "cantidad_entradas": str(cantidad),
+            "medio_pago": "efectivo",
+        }
+        for numero in range(1, cantidad + 1):
+            datos[f"edad_{numero}"] = "25"
+            datos[f"tipo_pase_{numero}"] = "regular"
+        respuesta = cliente.post("/comprar-entradas/", datos)
+
+    assert respuesta.status_code == 200
+    assert b"hasta 10 entradas para una misma fecha" in respuesta.content
+    assert Compra.objects.filter(fecha_visita=fecha).count() == 1
+    assert Compra.objects.get(fecha_visita=fecha).cantidad_entradas == 6
+
+
+def test_compra_aplica_descuentos_por_edad(cliente):
+    registrar_y_autenticar(cliente)
+    datos = {
+        "fecha_visita": fecha_habil_futura().isoformat(),
+        "cantidad_entradas": "3",
+        "medio_pago": "efectivo",
+        "edad_1": "3",
+        "tipo_pase_1": "regular",
+        "edad_2": "15",
+        "tipo_pase_2": "regular",
+        "edad_3": "60",
+        "tipo_pase_3": "vip",
+    }
+
+    respuesta = cliente.post("/comprar-entradas/", datos, follow=True)
+
+    assert respuesta.status_code == 200
+    assert b"Total: $15000" in respuesta.content
+
+
+@pytest.mark.parametrize(
+    ("edad", "total"),
+    (
+        (0, 0),
+        (3, 0),
+        (4, 5000),
+        (15, 5000),
+        (16, 10000),
+        (59, 10000),
+        (60, 5000),
+    ),
+)
+def test_compra_aplica_limites_de_descuento(cliente, edad, total):
+    registrar_y_autenticar(cliente)
+    datos = datos_compra(
+        cantidad_entradas="1",
+        edad_1=str(edad),
+        tipo_pase_1="regular",
+    )
+
+    respuesta = cliente.post("/comprar-entradas/", datos, follow=True)
+
+    assert respuesta.status_code == 200
+    assert f"Total: ${total}".encode() in respuesta.content
+
+
+def test_compra_rechaza_fecha_con_mas_de_un_mes_de_anticipacion(cliente):
+    registrar_y_autenticar(cliente)
+    fecha = date.today() + timedelta(days=60)
+    while fecha.weekday() == 0 or (fecha.month, fecha.day) in {
+        (12, 25),
+        (1, 1),
+    }:
+        fecha += timedelta(days=1)
+    respuesta = cliente.post(
+        "/comprar-entradas/",
+        datos_compra(fecha_visita=fecha.isoformat()),
+    )
+
+    assert respuesta.status_code == 200
+    assert b"un mes de anticipaci\xc3\xb3n" in respuesta.content
+
+
+def test_compra_mismo_dia_se_rechaza_despues_de_las_1730(
+    cliente,
+    monkeypatch,
+):
+    registrar_y_autenticar(cliente)
+    hoy = date.today()
+    if hoy.weekday() == 0 or (hoy.month, hoy.day) in {(12, 25), (1, 1)}:
+        pytest.skip("La fecha actual es un día de cierre del parque.")
+    monkeypatch.setattr(
+        "ecoharmony.services.timezone.localtime",
+        lambda value=None, timezone=None: datetime.combine(hoy, time(17, 31)),
+    )
+    monkeypatch.setattr(
+        "ecoharmony.services.timezone.localdate",
+        lambda: hoy,
+    )
+
+    respuesta = cliente.post(
+        "/comprar-entradas/",
+        datos_compra(fecha_visita=hoy.isoformat()),
+    )
+
+    assert respuesta.status_code == 200
+    assert b"hasta las 17:30" in respuesta.content
+    assert Compra.objects.count() == 0
+
+
+def test_compra_mismo_dia_se_permite_hasta_las_1730(cliente, monkeypatch):
+    registrar_y_autenticar(cliente)
+    hoy = date.today()
+    if hoy.weekday() == 0 or (hoy.month, hoy.day) in {(12, 25), (1, 1)}:
+        pytest.skip("La fecha actual es un día de cierre del parque.")
+    monkeypatch.setattr(
+        "ecoharmony.services.timezone.localtime",
+        lambda value=None, timezone=None: datetime.combine(hoy, time(17, 30)),
+    )
+    monkeypatch.setattr(
+        "ecoharmony.services.timezone.localdate",
+        lambda: hoy,
+    )
+
+    respuesta = cliente.post(
+        "/comprar-entradas/",
+        datos_compra(fecha_visita=hoy.isoformat()),
+    )
+
+    assert respuesta.status_code == 200
+    assert b"Compra confirmada" in respuesta.content
+    assert Compra.objects.count() == 1
+
+
+@pytest.mark.parametrize(
+    ("fecha", "hoy"),
+    ((date(2026, 12, 25), date(2026, 12, 1)),
+     (date(2027, 1, 1), date(2026, 12, 1))),
+)
+def test_compra_rechaza_fechas_festivas(cliente, monkeypatch, fecha, hoy):
+    registrar_y_autenticar(cliente)
+    monkeypatch.setattr(
+        "ecoharmony.services.timezone.localtime",
+        lambda value=None, timezone=None: datetime.combine(hoy, time(12)),
+    )
+    monkeypatch.setattr(
+        "ecoharmony.services.timezone.localdate",
+        lambda: hoy,
+    )
+
+    respuesta = cliente.post(
+        "/comprar-entradas/",
+        datos_compra(fecha_visita=fecha.isoformat()),
+    )
+
+    assert respuesta.status_code == 200
+    assert b"cerrado los d\xc3\xadas festivos" in respuesta.content
+    assert Compra.objects.count() == 0
+
+
+def test_calendario_limita_fecha_maxima_y_muestra_reglas(cliente):
+    registrar_y_autenticar(cliente)
+    respuesta = cliente.get("/comprar-entradas/")
+
+    assert respuesta.status_code == 200
+    assert (
+        f'max="{fecha_maxima_compra().isoformat()}"'.encode()
+        in respuesta.content
+    )
+    assert b"25 de diciembre" in respuesta.content
+    assert b"1 de enero" in respuesta.content
 
 
 def test_compra_rechaza_edad_o_tipo_de_pase_faltante(cliente):

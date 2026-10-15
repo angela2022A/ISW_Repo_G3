@@ -1,0 +1,14 @@
+<dialog id="mail-enviado" open aria-labelledby="mail-enviado-titulo">
+  <h2 id="mail-enviado-titulo">Confirmación</h2>
+  <p>Mail enviado (simulado) a {{ email }}.</p>
+  <form method="dialog">
+    <button type="submit">Cerrar</button>
+  </form>
+</dialog>
+<script>
+  const modalMail = document.querySelector("#mail-enviado");
+  if (modalMail && typeof modalMail.showModal === "function") {
+    modalMail.close();
+    modalMail.showModal();
+  }
+</script>

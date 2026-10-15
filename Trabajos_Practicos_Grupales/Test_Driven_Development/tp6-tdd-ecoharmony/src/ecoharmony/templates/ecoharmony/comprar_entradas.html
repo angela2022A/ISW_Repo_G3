@@ -2,12 +2,13 @@
 {% block title %}Comprar entradas - EcoHarmony Park{% endblock %}
 {% block content %}
   <h1>Comprar entradas</h1>
-  <p class="muted">El parque abre de lunes a viernes. Seleccioná una fecha hábil igual o posterior a hoy.</p>
+  <p class="muted">El parque abre todos los días excepto los lunes, el 25 de diciembre y el 1 de enero. Podés comprar con hasta un mes de anticipación y, para hoy, hasta las 17:30.</p>
   <form method="post">
     {% csrf_token %}
     <label for="fecha_visita">Fecha de visita</label>
-    <input id="fecha_visita" name="fecha_visita" type="date" min="{% now 'Y-m-d' %}" value="{{ datos.fecha_visita|default:'' }}" aria-describedby="fecha_ayuda" required>
-    <small id="fecha_ayuda">Formato día/mes/año. Solo se permiten fechas de lunes a viernes.</small>
+    <input id="fecha_visita" name="fecha_visita" type="date" min="{% now 'Y-m-d' %}" max="{{ fecha_maxima }}" value="{{ datos.fecha_visita|default:'' }}" aria-describedby="fecha_ayuda fecha_error" required>
+    <small id="fecha_ayuda">Formato día/mes/año. Los días cerrados no se pueden seleccionar.</small>
+    <small id="fecha_error" class="field-error" role="alert" hidden></small>
 
     <label for="cantidad_entradas">Cantidad de entradas (1 a 10)</label>
     <input id="cantidad_entradas" name="cantidad_entradas" type="text" inputmode="numeric" pattern="[0-9]{1,2}" value="{{ cantidad_inicial }}" required>
@@ -20,7 +21,7 @@
         <input id="edad_{{ visitante.numero }}" name="edad_{{ visitante.numero }}" type="text" inputmode="numeric" pattern="[0-9]+" value="{{ visitante.edad }}" aria-label="Edad del visitante {{ visitante.numero }}">
         <label for="tipo_pase_{{ visitante.numero }}">Tipo de pase</label>
         <select id="tipo_pase_{{ visitante.numero }}" name="tipo_pase_{{ visitante.numero }}">
-          <option value="regular" data-price="{{ precio_regular }}"{% if visitante.tipo_pase == "regular" %} selected{% endif %}>Regular - ${{ precio_regular }}</option>
+          <option value="regular" data-price="{{ precio_regular }}"{% if visitante.tipo_pase == "regular" %} selected{% endif %}>Común - ${{ precio_regular }}</option>
           <option value="vip" data-price="{{ precio_vip }}"{% if visitante.tipo_pase == "vip" %} selected{% endif %}>VIP - ${{ precio_vip }}</option>
         </select>
       </section>
@@ -52,6 +53,29 @@
         campo.value = campo.value.replace(/\D/g, "");
       });
     });
+    function fechaCerrada(valor) {
+      if (!valor) return false;
+      const fecha = new Date(`${valor}T00:00:00`);
+      const diaSemana = fecha.getDay();
+      const mesDia = valor.slice(5);
+      return diaSemana === 1 || mesDia === "12-25" || mesDia === "01-01";
+    }
+    function validarFechaSeleccionada() {
+      let mensaje = "";
+      if (fechaCerrada(fechaVisita.value)) {
+        mensaje = "El parque permanece cerrado en esa fecha. Elegí otro día.";
+      } else if (
+        fechaVisita.value === new Date().toLocaleDateString("en-CA") &&
+        new Date().getHours() * 60 + new Date().getMinutes() > 17 * 60 + 30
+      ) {
+        mensaje = "La compra para hoy está disponible hasta las 17:30.";
+      }
+      fechaVisita.setCustomValidity(mensaje);
+      const errorFecha = document.querySelector("#fecha_error");
+      errorFecha.textContent = mensaje;
+      errorFecha.hidden = !mensaje;
+      if (mensaje) fechaVisita.value = "";
+    }
     function mostrarVisitantes() {
       const limite = Number(cantidad.value);
       visitantes.forEach((visitante) => {
@@ -64,7 +88,14 @@
       visitantes.forEach((visitante) => {
         if (!visitante.hidden) {
           const pase = visitante.querySelector("select");
-          total += Number(pase.selectedOptions[0].dataset.price);
+          let precio = Number(pase.selectedOptions[0].dataset.price);
+          const edadTexto = visitante.querySelector("input").value;
+          if (edadTexto !== "") {
+            const edad = Number(edadTexto);
+            if (edad <= 3) precio = 0;
+            else if (edad <= 15 || edad >= 60) precio /= 2;
+          }
+          total += precio;
         }
       });
       totalEstimado.textContent = `Total estimado: $${new Intl.NumberFormat("es-AR", {
@@ -81,18 +112,17 @@
       mostrarVisitantes();
     });
     formulario.addEventListener("submit", (evento) => {
-      const seleccionada = new Date(`${fechaVisita.value}T00:00:00`);
-      const esFinDeSemana =
-        seleccionada.getDay() === 0 || seleccionada.getDay() === 6;
-      fechaVisita.setCustomValidity(
-        esFinDeSemana ? "El parque abre de lunes a viernes." : "",
-      );
+      validarFechaSeleccionada();
       if (!formulario.reportValidity()) {
         evento.preventDefault();
       }
     });
+    fechaVisita.addEventListener("change", validarFechaSeleccionada);
     document.querySelectorAll("[data-visitor] select").forEach((pase) => {
       pase.addEventListener("change", actualizarTotal);
+    });
+    document.querySelectorAll("[data-visitor] input").forEach((edad) => {
+      edad.addEventListener("input", actualizarTotal);
     });
     mostrarVisitantes();
   </script>

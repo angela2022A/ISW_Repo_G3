@@ -82,9 +82,5 @@ DEFAULT_FROM_EMAIL = os.environ.get(
     "entradas@ecoharmony.test",
 )
 
-PRECIO_ENTRADA_REGULAR = os.environ.get("PRECIO_ENTRADA_REGULAR", "1000")
-PRECIO_ENTRADA_VIP = os.environ.get("PRECIO_ENTRADA_VIP", "2000")
-MERCADO_PAGO_CHECKOUT_URL = os.environ.get(
-    "MERCADO_PAGO_CHECKOUT_URL",
-    "https://www.mercadopago.com/checkout",
-)
+PRECIO_ENTRADA_REGULAR = os.environ.get("PRECIO_ENTRADA_REGULAR", "10000")
+PRECIO_ENTRADA_VIP = os.environ.get("PRECIO_ENTRADA_VIP", "20000")

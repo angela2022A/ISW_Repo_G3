@@ -1,0 +1,11 @@
+{% extends "ecoharmony/base.html" %}
+{% block title %}Mercado Pago - EcoHarmony Park{% endblock %}
+{% block content %}
+  <h1>Mercado Pago Compra Exitosa</h1>
+  <p>Este es un pago de prueba; no se realizó ningún cobro.</p>
+  <p>Orden: {{ compra.pk }}</p>
+  <p>Fecha de visita: {{ compra.fecha_visita|date:"d/m/Y" }}</p>
+  <p>Total: ${{ total_mostrado }}</p>
+  {% include "ecoharmony/mail_enviado_modal.html" with email=compra.usuario.email %}
+  <a class="button" href="/">Volver al inicio</a>
+{% endblock %}

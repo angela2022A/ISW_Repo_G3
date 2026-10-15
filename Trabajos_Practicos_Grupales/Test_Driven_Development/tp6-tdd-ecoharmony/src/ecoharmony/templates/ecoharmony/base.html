@@ -3,27 +3,33 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
   <title>{% block title %}EcoHarmony Park{% endblock %}</title>
   <style>
-    :root { color-scheme: light; font-family: system-ui, sans-serif; color: #17352b; background: #f3f7f1; }
+    :root { color-scheme: light; font-family: Lato, sans-serif; color: #386641; background: #f2e8cf; }
     body { margin: 0; }
-    header { background: #174b38; color: white; padding: 1rem max(1.25rem, calc((100% - 900px) / 2)); }
+    header { background: #386641; color: white; padding: 1rem max(1.25rem, calc((100% - 900px) / 2)); }
     header a { color: white; margin-right: 1rem; }
     header .logout-form { display: inline; }
     header .logout-form button { margin: 0 0 0 1rem; padding: .35rem .6rem; }
     main { box-sizing: border-box; width: min(100% - 2rem, 760px); margin: 2rem auto; background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 8px 30px #17352b12; }
-    h1, h2 { color: #174b38; }
+    h1, h2 { color: #386641; }
     label { display: block; margin: .75rem 0 .25rem; font-weight: 600; }
-    input, select, button { box-sizing: border-box; font: inherit; padding: .65rem; border: 1px solid #a9bdb2; border-radius: .4rem; }
+    input, select, button { box-sizing: border-box; font: inherit; padding: .65rem; border: 1px solid #a7c957; border-radius: .4rem; }
     input, select { width: 100%; }
-    button, .button { display: inline-block; margin-top: 1rem; padding: .7rem 1rem; background: #176b4a; border: 0; color: white; text-decoration: none; border-radius: .4rem; cursor: pointer; }
-    .errors, .messages { padding: .75rem 1rem; border-radius: .5rem; background: #fff1e9; color: #7d2f18; }
-    .visitor { border-top: 1px solid #dce7df; margin-top: 1rem; padding-top: .5rem; }
+    button, .button { display: inline-block; margin-top: 1rem; padding: .7rem 1rem; background: #6a994e; border: 0; color: white; text-decoration: none; border-radius: .4rem; cursor: pointer; }
+    .errors, .messages { padding: .75rem 1rem; border-radius: .5rem; background: #f2e8cf; color: #bc4749; }
+    .visitor { border-top: 1px solid #a7c957; margin-top: 1rem; padding-top: .5rem; }
     .visitor[hidden] { display: none; }
-    .payment-section { margin-top: 1.5rem; padding: .75rem 1rem 1rem; border: 1px solid #dce7df; border-radius: .5rem; }
+    .payment-section { margin-top: 1.5rem; padding: .75rem 1rem 1rem; border: 1px solid #a7c957; border-radius: .5rem; }
     .payment-section legend { padding: 0 .35rem; font-weight: 700; }
     small { display: block; margin-top: .25rem; color: #51685c; }
     .muted { color: #51685c; }
+    .field-error { color: #bc4749; }
+    dialog { max-width: min(28rem, calc(100% - 3rem)); border: 2px solid #6a994e; border-radius: .75rem; color: #386641; }
+    dialog::backdrop { background: #17352b99; }
     @media (max-width: 520px) { main { padding: 1.25rem; } }
   </style>
 </head>

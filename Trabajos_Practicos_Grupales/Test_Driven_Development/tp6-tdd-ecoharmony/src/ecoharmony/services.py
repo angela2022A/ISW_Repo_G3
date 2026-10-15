@@ -1,6 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from datetime import date
+from calendar import monthrange
+from datetime import date, time
 from decimal import Decimal, InvalidOperation
 
 from django.conf import settings
@@ -65,10 +66,25 @@ def _validar_fecha_visita(datos, hoy, errores):
 
     if fecha_visita is not None and fecha_visita < hoy:
         errores.append("La fecha de visita no puede ser pasada.")
-    elif fecha_visita is not None and fecha_visita.weekday() >= 5:
-        errores.append("El parque abre de lunes a viernes.")
+    elif fecha_visita is not None:
+        if fecha_visita > fecha_maxima_compra(hoy):
+            errores.append(
+                "La fecha de visita no puede superar un mes de anticipación."
+            )
+        if fecha_visita.weekday() == 0:
+            errores.append("El parque permanece cerrado los lunes.")
+        if (fecha_visita.month, fecha_visita.day) in {(12, 25), (1, 1)}:
+            errores.append("El parque permanece cerrado los días festivos.")
 
     return fecha_visita
+
+
+def fecha_maxima_compra(hoy=None):
+    hoy = hoy or timezone.localdate()
+    mes = hoy.month % 12 + 1
+    anio = hoy.year + (hoy.month == 12)
+    dia = min(hoy.day, monthrange(anio, mes)[1])
+    return date(anio, mes, dia)
 
 
 def _validar_cantidad_entradas(datos, errores):
@@ -105,11 +121,16 @@ def _validar_visitante(datos, numero, errores):
     return {"edad": edad, "tipo_pase": pase}
 
 
-def validar_compra(datos, hoy=None):
+def validar_compra(datos, hoy=None, ahora=None):
     errores = []
     hoy = hoy or timezone.localdate()
+    ahora = ahora or timezone.localtime()
 
     fecha_visita = _validar_fecha_visita(datos, hoy, errores)
+    if fecha_visita == hoy and ahora.time() > time(17, 30):
+        errores.append(
+            "Las entradas para hoy solo se pueden comprar hasta las 17:30."
+        )
     cantidad = _validar_cantidad_entradas(datos, errores)
 
     visitantes = []
@@ -129,7 +150,13 @@ def validar_compra(datos, hoy=None):
         "vip": _precio_configurado("PRECIO_ENTRADA_VIP"),
     }
     total = sum(
-        (precios[visitante["tipo_pase"]] for visitante in visitantes),
+        (
+            _precio_con_descuento(
+                precios[visitante["tipo_pase"]],
+                visitante["edad"],
+            )
+            for visitante in visitantes
+        ),
         start=Decimal("0"),
     )
 
@@ -139,3 +166,11 @@ def validar_compra(datos, hoy=None):
         medio_pago=medio_pago,
         total=total,
     )
+
+
+def _precio_con_descuento(precio, edad):
+    if edad <= 3:
+        return Decimal("0")
+    if edad <= 15 or edad >= 60:
+        return precio / Decimal("2")
+    return precio
