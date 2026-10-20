@@ -67,6 +67,14 @@ def test_inicio_web_muestra_acceso_a_compra_de_entradas(cliente):
     assert b"Comprar entradas" in respuesta.content
 
 
+def test_encabezado_muestra_logo_del_parque(cliente):
+    respuesta = cliente.get("/")
+
+    assert respuesta.status_code == 200
+    assert b'class="logo-icono"' in respuesta.content
+    assert b"Logo de EcoHarmony Park" in respuesta.content
+
+
 def test_visitante_sin_registro_no_puede_iniciar_una_compra(cliente):
     respuesta = cliente.get("/comprar-entradas/")
 

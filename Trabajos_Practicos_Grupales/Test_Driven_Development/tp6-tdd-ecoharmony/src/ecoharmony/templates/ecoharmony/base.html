@@ -12,6 +12,8 @@
     body { margin: 0; }
     header { background: #386641; color: white; padding: 1rem max(1.25rem, calc((100% - 900px) / 2)); }
     header a { color: white; margin-right: 1rem; }
+    header .marca { display: inline-flex; align-items: center; gap: .6rem; font-weight: 700; font-size: 1.15rem; text-decoration: none; vertical-align: middle; }
+    .logo-icono { width: 2.5rem; height: 2.5rem; flex: none; }
     header .logout-form { display: inline; }
     header .logout-form button { margin: 0 0 0 1rem; padding: .35rem .6rem; }
     main { box-sizing: border-box; width: min(100% - 2rem, 760px); margin: 2rem auto; background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 8px 30px #17352b12; }
@@ -35,7 +37,7 @@
 </head>
 <body>
   <header>
-    <a href="/">EcoHarmony Park</a>
+    <a href="/" class="marca">{% include "ecoharmony/logo.svg" %}<span>EcoHarmony Park</span></a>
     {% if user.is_authenticated %}
       <a href="/comprar-entradas/">Comprar entradas</a>
       <span>{{ user.email }}</span>

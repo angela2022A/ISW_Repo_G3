@@ -1,0 +1,16 @@
+<svg class="logo-icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="44" height="44" role="img" aria-labelledby="logo-titulo">
+  <title id="logo-titulo">Logo de EcoHarmony Park</title>
+  <defs>
+    <clipPath id="logo-recorte"><circle cx="32" cy="32" r="28.5"/></clipPath>
+  </defs>
+  <circle cx="32" cy="32" r="31" fill="#a7c957"/>
+  <circle cx="32" cy="32" r="28.5" fill="#f2e8cf"/>
+  <g clip-path="url(#logo-recorte)">
+    <circle cx="44.5" cy="21" r="7" fill="#bc4749"/>
+    <path d="M0 45 C 14 35, 26 35, 40 43 S 58 49, 64 41 V 64 H 0 Z" fill="#6a994e"/>
+    <path d="M0 53 C 16 45, 34 45, 48 51 S 60 55, 64 51 V 64 H 0 Z" fill="#386641"/>
+  </g>
+  <path d="M29.5 51 C 17 41, 19 22, 33.5 11 C 40.5 25, 40.5 40, 29.5 51 Z" fill="#a7c957" stroke="#386641" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M29.5 51 C 30.5 39, 32.5 26, 33.5 13" fill="none" stroke="#386641" stroke-width="2" stroke-linecap="round"/>
+  <path d="M31 33 L 25.5 27.5 M 32 26 L 36.5 21.5 M 30.4 41 L 35.5 36" fill="none" stroke="#386641" stroke-width="1.6" stroke-linecap="round"/>
+</svg>
