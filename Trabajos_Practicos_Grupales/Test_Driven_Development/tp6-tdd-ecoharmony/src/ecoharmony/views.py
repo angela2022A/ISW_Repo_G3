@@ -14,6 +14,7 @@ from django.views.decorators.http import require_POST
 from .models import Compra
 from .services import (
     ErrorValidacionCompra,
+    enviar_confirmacion_compra,
     fecha_maxima_compra,
     validar_compra,
 )
@@ -186,6 +187,8 @@ def comprar_entradas(request):
             contexto,
             status=200,
         )
+
+    enviar_confirmacion_compra(compra)
 
     if compra.medio_pago == Compra.MedioPago.TARJETA:
         return redirect("pago_tarjeta_simulado", compra_id=compra.pk)

@@ -3,6 +3,7 @@
 from datetime import date, datetime, time, timedelta
 from io import StringIO
 import pytest
+from django.core import mail
 from django.core.management import call_command
 from django.test import Client
 from ecoharmony.services import fecha_maxima_compra
@@ -113,7 +114,7 @@ def test_formulario_separa_forma_de_pago_de_datos_de_visitantes(cliente):
     )
 
 
-def test_compra_en_efectivo_muestra_confirmacion_de_mail_simulado(cliente):
+def test_compra_en_efectivo_envia_mail_de_confirmacion_al_usuario(cliente):
     registrar_y_autenticar(cliente)
     respuesta = cliente.post(
         "/comprar-entradas/",
@@ -126,7 +127,14 @@ def test_compra_en_efectivo_muestra_confirmacion_de_mail_simulado(cliente):
     assert b"Compra confirmada" in respuesta.content
     assert b"Entradas: 2" in respuesta.content
     assert fecha_mostrada.encode() in respuesta.content
-    assert b"Mail enviado (simulado) a ana@example.com" in respuesta.content
+    assert len(mail.outbox) == 1
+    mensaje = mail.outbox[0]
+    assert mensaje.to == ["ana@example.com"]
+    assert "Entradas: 2" in mensaje.body
+    assert fecha_mostrada in mensaje.body
+    assert "Te enviamos la confirmación a ana@example.com".encode() in (
+        respuesta.content
+    )
 
 
 def test_compra_calcula_total_segun_pase_de_cada_visitante(cliente):
@@ -140,7 +148,7 @@ def test_compra_calcula_total_segun_pase_de_cada_visitante(cliente):
     assert b"Total: $20000" in respuesta.content
 
 
-def test_compra_con_tarjeta_muestra_checkout_simulado(cliente):
+def test_compra_con_tarjeta_muestra_checkout_y_envia_mail(cliente):
     registrar_y_autenticar(cliente)
     respuesta = cliente.post(
         "/comprar-entradas/",
@@ -152,7 +160,11 @@ def test_compra_con_tarjeta_muestra_checkout_simulado(cliente):
     assert respuesta.status_code == 200
     assert b"Mercado Pago Compra Exitosa" in respuesta.content
     assert b"no se realiz\xc3\xb3 ning\xc3\xban cobro" in respuesta.content
-    assert b"Mail enviado (simulado) a ana@example.com" in respuesta.content
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].to == ["ana@example.com"]
+    assert "Te enviamos la confirmación a ana@example.com".encode() in (
+        respuesta.content
+    )
 
 
 def test_compra_sin_medio_de_pago_muestra_error_y_no_crea_compra(cliente):
@@ -165,6 +177,7 @@ def test_compra_sin_medio_de_pago_muestra_error_y_no_crea_compra(cliente):
     assert respuesta.status_code == 200
     assert b"Seleccion" in respuesta.content
     assert Compra.objects.count() == 0
+    assert len(mail.outbox) == 0
 
 
 def test_compra_rechaza_fecha_anterior_a_hoy(cliente):
