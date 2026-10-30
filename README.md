@@ -102,6 +102,7 @@ Cada fila define una familia de ítems de configuración, no un archivo puntual:
 |Programa de la Materia|`G3_ADM_ProgramaMateria.pdf`|`ISW_Repo_G3/Administracion_Materia`|Administrativo|
 |Lineamiento de Trabajos Prácticos Grupales|`G3_ADM_LineamientoTPs.docx`|`ISW_Repo_G3/Administracion_Materia`|Administrativo|
 |Material de Apoyo para Parciales|`G3_PARC_MatApoyo_<NN>.pdf`|`ISW_Repo_G3/Parciales/Parcial_<NN>`|Soporte|
+|Resumen de Parcial|`G3_PARC_Resumen_<NN>_<AUTOR>.pdf`|`ISW_Repo_G3/Parciales/Parcial_<NN>`|Soporte|
 |Material Bibliográfico|`G3_BIB_<UNIDAD_TEMATICA>_<AUTOR_O_TEMA>.pdf`|`ISW_Repo_G3/Material_Bibliografico/<Unidad_Tematica>`|Soporte|
 |Presentación de Clase|`G3_PRES_U<N>_<TEMA>.pdf`|`ISW_Repo_G3/Presentaciones_Clases/<Tema>`|Soporte|
 |Apunte de Clase|`G3_APU_<NN>_<TEMA>_<AUTOR>.pdf`|`ISW_Repo_G3/Apuntes_Clases`|Soporte|
