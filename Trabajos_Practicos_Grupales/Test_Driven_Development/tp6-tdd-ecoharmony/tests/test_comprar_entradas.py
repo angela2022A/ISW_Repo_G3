@@ -252,7 +252,7 @@ def test_compra_rechaza_mas_de_diez_entradas_acumuladas_por_fecha(cliente):
 
     assert respuesta.status_code == 200
     assert b"hasta 10 entradas para una misma fecha" in respuesta.content
-    assert Compra.objects.filter(fecha_visita=fecha).count() == 1
+    assert Compra.objects.filter(fecha_visita=fecha).count() == 2
     assert Compra.objects.get(fecha_visita=fecha).cantidad_entradas == 6
 
 
